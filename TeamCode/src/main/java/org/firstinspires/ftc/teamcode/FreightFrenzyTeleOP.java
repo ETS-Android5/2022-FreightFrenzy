@@ -39,11 +39,11 @@ public class FreightFrenzyTeleOP extends OpMode {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
         double frontLeftPan, frontRightPan, backLeftPan, backRightPan;
 
-        double powerScale = 1.0;
+        double powerScale = 0.8;
 
         double drive = -gamepad1.left_stick_y;
-        double turn = gamepad1.right_stick_x;
-        double pan = gamepad1.left_stick_x;
+        double turn = gamepad1.left_stick_x;
+        double pan = gamepad1.right_stick_x;
 
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
         frontRightPower = Range.clip(drive + turn, -1.0, 1.0);
