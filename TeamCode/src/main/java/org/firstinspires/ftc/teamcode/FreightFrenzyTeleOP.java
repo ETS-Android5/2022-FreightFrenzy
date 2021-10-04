@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
-@TeleOp(name="2020 Freshies Test Code", group="Interactive Opmode")
+@TeleOp(name="Freight Frenzy TeleOP", group="Interactive Opmode")
 
-public class FreshiesTraining extends OpMode {
+public class FreightFrenzyTeleOP extends OpMode {
     private DcMotor frontRightMotor = null;
     private DcMotor frontLeftMotor = null;
     private DcMotor backLeftMotor = null;
@@ -64,11 +64,13 @@ public class FreshiesTraining extends OpMode {
         backRightMotor.setPower(powerScale * backRightPan);
     }
 
+    @Override
     public void stop()
     {
-        frontLeftMotor.setPower(0);
-        frontRightMotor.setPower(0);
-        backLeftMotor.setPower(0);
-        backRightMotor.setPower(0);
+        // pls do
+        frontLeftMotor.setPower(0.0);
+        frontRightMotor.setPower(0.0);
+        backLeftMotor.setPower(0.0);
+        backRightMotor.setPower(0.0);
     }
 }
