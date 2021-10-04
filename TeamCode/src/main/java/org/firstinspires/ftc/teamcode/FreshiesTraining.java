@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="2020 Freshies Test Code", group="Interactive Opmode")
 
-
 public class FreshiesTraining extends OpMode {
     private DcMotor frontRightMotor = null;
     private DcMotor frontLeftMotor = null;
@@ -32,7 +31,7 @@ public class FreshiesTraining extends OpMode {
     @Override
     public void init_loop()
     {
-
+        // pls do
     }
 
     @Override
@@ -40,16 +39,16 @@ public class FreshiesTraining extends OpMode {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
         double frontLeftPan, frontRightPan, backLeftPan, backRightPan;
 
-        double powerScale = 0.8;
+        double powerScale = 1.0;
 
-        double drive = gamepad1.left_stick_y;
-        double pan = -gamepad1.right_stick_x;
-        double turn = -gamepad1.left_stick_x;
+        double drive = -gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
+        double pan = gamepad1.left_stick_x;
 
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
-        frontRightPower = Range.clip(drive - turn, -1.0, 1.0);
+        frontRightPower = Range.clip(drive + turn, -1.0, 1.0);
         backLeftPower = Range.clip(drive - turn, -1.0, 1.0);
-        backRightPower = Range.clip(drive + turn, -1.0, 1.0);
+        backRightPower = Range.clip(drive - turn, -1.0, 1.0);
         frontLeftMotor.setPower(powerScale * frontLeftPower);
         frontRightMotor.setPower(powerScale * frontRightPower);
         backLeftMotor.setPower(powerScale * backLeftPower);
@@ -67,6 +66,9 @@ public class FreshiesTraining extends OpMode {
 
     public void stop()
     {
-
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
     }
 }
