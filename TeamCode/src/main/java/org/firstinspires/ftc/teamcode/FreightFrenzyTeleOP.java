@@ -27,6 +27,7 @@ public class FreightFrenzyTeleOP extends OpMode {
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.addData("say: ", "Working");
+        telemetry.addData("say: ", "Last Update: 2021-10-XX XX:XX");
     }
     @Override
     public void init_loop()
@@ -67,7 +68,7 @@ public class FreightFrenzyTeleOP extends OpMode {
     @Override
     public void stop()
     {
-        // pls do
+        // pls do, part two
         frontLeftMotor.setPower(0.0);
         frontRightMotor.setPower(0.0);
         backLeftMotor.setPower(0.0);
