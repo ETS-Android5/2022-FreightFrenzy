@@ -78,11 +78,11 @@ public class FreightFrenzyTeleOP extends OpMode
 
         if (gamepad1.right_trigger > 0)
         {
-            intakeMotor.setPower(0.69);
+            intakeMotor.setPower(0.9);
         }
         else
         {
-            intakeMotor.setPower(0.0);
+            intakeMotor.setPower(0.7);
         }
     }
 
