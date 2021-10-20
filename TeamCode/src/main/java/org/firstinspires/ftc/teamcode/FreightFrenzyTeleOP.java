@@ -54,7 +54,7 @@ public class FreightFrenzyTeleOP extends OpMode
     @Override
     public void loop()
     {
-        double drive = -gamepad1.left_stick_y;
+        double drive = gamepad1.left_stick_y;
         double turn = gamepad1.left_stick_x;
         double pan = gamepad1.right_stick_x;
 
