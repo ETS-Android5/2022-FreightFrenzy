@@ -5,13 +5,27 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
-@TeleOp(name="Freight Frenzy TeleOP", group="Interactive Opmode")
 
-public class FreightFrenzyTeleOP extends OpMode {
+@TeleOp(name="LogisNICS TeleOP", group="Interactive Opmode")
+
+public class FreightFrenzyTeleOP extends OpMode
+{
+
+    // Control Hub
     private DcMotor frontRightMotor = null;
     private DcMotor frontLeftMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+
+    // Expansion Hub
+    private DcMotor intakeMotor = null;
+
+    // Doubles for the power of our motors
+    private double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
+    private double frontLeftPan, frontRightPan, backLeftPan, backRightPan;
+
+    // Scale variable for all drive, turn, and pan functions
+    private double powerScale = 0.8;
 
     @Override
     public void init ()
@@ -20,14 +34,16 @@ public class FreightFrenzyTeleOP extends OpMode {
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("say: ", "Working");
-        telemetry.addData("say: ", "Last Update: 2021-10-XX XX:XX");
+        telemetry.addData("say: ", "Last Update: 2021-10-20 16:09");
     }
     @Override
     public void init_loop()
@@ -36,12 +52,8 @@ public class FreightFrenzyTeleOP extends OpMode {
     }
 
     @Override
-    public void loop() {
-        double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
-        double frontLeftPan, frontRightPan, backLeftPan, backRightPan;
-
-        double powerScale = 0.8;
-
+    public void loop()
+    {
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.left_stick_x;
         double pan = gamepad1.right_stick_x;
@@ -63,6 +75,15 @@ public class FreightFrenzyTeleOP extends OpMode {
         frontRightMotor.setPower(powerScale * frontRightPan);
         backLeftMotor.setPower(powerScale * backLeftPan);
         backRightMotor.setPower(powerScale * backRightPan);
+
+        if (gamepad1.right_trigger > 0)
+        {
+            intakeMotor.setPower(0.69);
+        }
+        else
+        {
+            intakeMotor.setPower(0.0);
+        }
     }
 
     @Override
@@ -73,5 +94,6 @@ public class FreightFrenzyTeleOP extends OpMode {
         frontRightMotor.setPower(0.0);
         backLeftMotor.setPower(0.0);
         backRightMotor.setPower(0.0);
+        intakeMotor.setPower(0.0);
     }
 }
