@@ -20,7 +20,7 @@ public class FreightFrenzyTeleOP extends OpMode
     // Expansion Hub
     private DcMotor intakeMotor = null;
 
-    // Doubles for the power of our motors
+    // Doubles for the power of our driving motors
     private double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
     private double frontLeftPan, frontRightPan, backLeftPan, backRightPan;
 
@@ -30,20 +30,22 @@ public class FreightFrenzyTeleOP extends OpMode
     @Override
     public void init ()
     {
+        // Initalizations to connect our motor variables to the motor on the robot
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
 
+        // Direction setting for the motors, depending on their physical orientation on the robot
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        telemetry.addData("say: ", "Working");
-        telemetry.addData("say: ", "Last Update: 2021-10-20 16:09");
+        telemetry.addData("", "Working");
+        telemetry.addData("", "Last Update: 2021-10-20 16:09");
     }
     @Override
     public void init_loop()
@@ -58,6 +60,7 @@ public class FreightFrenzyTeleOP extends OpMode
         double turn = gamepad1.left_stick_x;
         double pan = gamepad1.right_stick_x;
 
+        // Driving controls
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
         frontRightPower = Range.clip(drive + turn, -1.0, 1.0);
         backLeftPower = Range.clip(drive - turn, -1.0, 1.0);
@@ -67,6 +70,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setPower(powerScale * backLeftPower);
         backRightMotor.setPower(powerScale * backRightPower);
 
+        // Panning controls
         frontLeftPan = Range.clip(drive + pan, -1.0, 1.0);
         frontRightPan = Range.clip(drive - pan, -1.0, 1.0);
         backLeftPan = Range.clip(drive + pan, -1.0, 1.0);
@@ -76,6 +80,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setPower(powerScale * backLeftPan);
         backRightMotor.setPower(powerScale * backRightPan);
 
+        // Intake motor power: includes "boost" mode when right trigger is pressed
         if (gamepad1.right_trigger > 0)
         {
             intakeMotor.setPower(0.9);
