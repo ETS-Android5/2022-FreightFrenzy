@@ -19,6 +19,7 @@ public class FreightFrenzyTeleOP extends OpMode
 
     // Expansion Hub
     private DcMotor intakeMotor = null;
+    private DcMotor duckMotor = null;
 
     // Doubles for the power of our driving motors
     private double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
@@ -43,6 +44,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        duckMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("", "Working");
         telemetry.addData("", "Last Update: 2021-10-20 16:09");
@@ -89,6 +91,15 @@ public class FreightFrenzyTeleOP extends OpMode
         {
             intakeMotor.setPower(0.7);
         }
+
+        if (gamepad1.right_bumper)
+        {
+            duckMotor.setPower(0.6);
+        }
+        else
+        {
+            duckMotor.setPower(0.0);
+        }
     }
 
     @Override
@@ -100,5 +111,6 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setPower(0.0);
         backRightMotor.setPower(0.0);
         intakeMotor.setPower(0.0);
+        duckMotor.setPower(0.0);
     }
 }
