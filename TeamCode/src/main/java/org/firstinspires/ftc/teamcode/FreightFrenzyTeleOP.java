@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="LogisNICS TeleOP", group="Interactive Opmode")
+@TeleOp(name="LogisNICS TeleOp", group="Interactive Opmode")
 
 public class FreightFrenzyTeleOP extends OpMode
 {
@@ -37,6 +37,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
+        duckMotor = hardwareMap.dcMotor.get("duckMotor");
 
         // Direction setting for the motors, depending on their physical orientation on the robot
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -47,7 +48,7 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("", "Working");
-        telemetry.addData("", "Last Update: 2021-10-20 16:09");
+        telemetry.addData("", "Last Update: 2021-10-25 16:05");
     }
     @Override
     public void init_loop()
@@ -92,6 +93,7 @@ public class FreightFrenzyTeleOP extends OpMode
             intakeMotor.setPower(0.7);
         }
 
+        // Duck carousel spinner
         if (gamepad1.right_bumper)
         {
             duckMotor.setPower(0.6);
