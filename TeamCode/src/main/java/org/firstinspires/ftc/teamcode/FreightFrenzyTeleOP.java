@@ -45,10 +45,10 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        duckMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        duckMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         telemetry.addData("", "Working");
-        telemetry.addData("", "Last Update: 2021-10-25 16:05");
+        telemetry.addData("", "Last Update: 2021-10-26 16:46");
     }
     @Override
     public void init_loop()
@@ -74,10 +74,10 @@ public class FreightFrenzyTeleOP extends OpMode
         backRightMotor.setPower(powerScale * backRightPower);
 
         // Panning controls
-        frontLeftPan = Range.clip(drive + pan, -1.0, 1.0);
-        frontRightPan = Range.clip(drive - pan, -1.0, 1.0);
-        backLeftPan = Range.clip(drive + pan, -1.0, 1.0);
-        backRightPan = Range.clip(drive - pan, -1.0, 1.0);
+        frontLeftPan = Range.clip(drive - pan, -1.0, 1.0);
+        frontRightPan = Range.clip(drive + pan, -1.0, 1.0);
+        backLeftPan = Range.clip(drive - pan, -1.0, 1.0);
+        backRightPan = Range.clip(drive + pan, -1.0, 1.0);
         frontLeftMotor.setPower(powerScale * frontLeftPan);
         frontRightMotor.setPower(powerScale * frontRightPan);
         backLeftMotor.setPower(powerScale * backLeftPan);
