@@ -60,13 +60,13 @@ public class FreightFrenzyTeleOP extends OpMode
     public void loop()
     {
         double drive = gamepad1.left_stick_y;
-        double turn = gamepad1.left_stick_x;
-        double pan = gamepad1.right_stick_x;
+        double turn = gamepad1.right_stick_x;
+        double pan = gamepad1.left_stick_x;
 
         // Driving controls
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
-        frontRightPower = Range.clip(drive + turn, -1.0, 1.0);
-        backLeftPower = Range.clip(drive - turn, -1.0, 1.0);
+        frontRightPower = Range.clip(drive - turn, -1.0, 1.0);
+        backLeftPower = Range.clip(drive + turn, -1.0, 1.0);
         backRightPower = Range.clip(drive - turn, -1.0, 1.0);
         frontLeftMotor.setPower(powerScale * frontLeftPower);
         frontRightMotor.setPower(powerScale * frontRightPower);
@@ -75,8 +75,8 @@ public class FreightFrenzyTeleOP extends OpMode
 
         // Panning controls
         frontLeftPan = Range.clip(drive - pan, -1.0, 1.0);
-        frontRightPan = Range.clip(drive + pan, -1.0, 1.0);
-        backLeftPan = Range.clip(drive - pan, -1.0, 1.0);
+        frontRightPan = Range.clip(drive - pan, -1.0, 1.0);
+        backLeftPan = Range.clip(drive + pan, -1.0, 1.0);
         backRightPan = Range.clip(drive + pan, -1.0, 1.0);
         frontLeftMotor.setPower(powerScale * frontLeftPan);
         frontRightMotor.setPower(powerScale * frontRightPan);
