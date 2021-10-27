@@ -96,7 +96,7 @@ public class FreightFrenzyTeleOP extends OpMode
         // Duck carousel spinner
         if (gamepad1.right_bumper)
         {
-            duckMotor.setPower(0.6);
+            duckMotor.setPower(0.7);
         }
         else
         {
