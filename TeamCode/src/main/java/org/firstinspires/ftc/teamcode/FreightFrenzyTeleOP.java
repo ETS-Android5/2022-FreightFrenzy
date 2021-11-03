@@ -28,6 +28,9 @@ public class FreightFrenzyTeleOP extends OpMode
     // Scale variable for all drive, turn, and pan functions
     private double powerScale = 0.8;
 
+    double duckMax = 0.8;
+    double duckPower = 0.0;
+
     @Override
     public void init ()
     {
@@ -88,18 +91,33 @@ public class FreightFrenzyTeleOP extends OpMode
         {
             intakeMotor.setPower(0.9);
         }
+        else if (gamepad1.a)
+        {
+            intakeMotor.setPower((0.0));
+        }
+        else if (gamepad1.b)
+        {
+            intakeMotor.setPower(-0.7);
+        }
         else
         {
             intakeMotor.setPower(0.7);
         }
 
+
         // Duck carousel spinner
         if (gamepad1.right_bumper)
         {
-            duckMotor.setPower(0.7);
+            telemetry.addData("duckPower: ", "" + duckPower);
+            if (duckPower < duckMax)
+            {
+                duckPower += 0.005;
+            }
+            duckMotor.setPower(duckPower);
         }
         else
         {
+            duckPower = 0.0;
             duckMotor.setPower(0.0);
         }
     }
