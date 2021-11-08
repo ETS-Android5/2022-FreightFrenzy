@@ -143,7 +143,14 @@ public class FreightFrenzyTeleOP extends OpMode
             liftMotor.setPower(0.0);
         }
 
-
+        if (gamepad1.right_bumper)
+        {
+            extendServo.setPower(-0.34);
+        }
+        else if (gamepad1.left_bumper)
+        {
+            extendServo.setPower(-0.45);
+        }
 
 
     }
