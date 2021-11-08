@@ -47,9 +47,9 @@ public class FreightFrenzyTeleOP extends OpMode
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-       //clawServo = hardwareMap.crservo.get("clawServo");
+        //clawServo = hardwareMap.crservo.get("clawServo");
         //spinServo = hardwareMap.crservo.get("spinServo");
-       //extendServo = hardwareMap.crservo.get("extendServo");
+        //extendServo = hardwareMap.crservo.get("extendServo");
 
         // Direction setting for the motors, depending on their physical orientation on the robot
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -61,7 +61,7 @@ public class FreightFrenzyTeleOP extends OpMode
         liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("", "Working");
-        telemetry.addData("", "Last Update: 2021-10-26 16:46");
+        telemetry.addData("", "Last Update: 2021-11-08 16:57");
     }
     @Override
     public void init_loop()
@@ -130,6 +130,7 @@ public class FreightFrenzyTeleOP extends OpMode
             duckMotor.setPower(0.0);
         }
 
+        // Controls the vertical movement of the claw
         if (gamepad1.dpad_up)
         {
             liftMotor.setPower(0.8);
@@ -143,6 +144,7 @@ public class FreightFrenzyTeleOP extends OpMode
             liftMotor.setPower(0.0);
         }
 
+        // Controls the opening and closing of the claw
         if (gamepad1.right_bumper)
         {
             extendServo.setPower(-0.34);
@@ -151,8 +153,6 @@ public class FreightFrenzyTeleOP extends OpMode
         {
             extendServo.setPower(-0.45);
         }
-
-
     }
 
     @Override
@@ -165,5 +165,6 @@ public class FreightFrenzyTeleOP extends OpMode
         backRightMotor.setPower(0.0);
         intakeMotor.setPower(0.0);
         duckMotor.setPower(0.0);
+        liftMotor.setPower(0.0);
     }
 }
