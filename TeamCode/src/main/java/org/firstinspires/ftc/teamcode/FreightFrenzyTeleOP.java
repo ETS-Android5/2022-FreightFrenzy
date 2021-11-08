@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
@@ -16,10 +17,14 @@ public class FreightFrenzyTeleOP extends OpMode
     private DcMotor frontLeftMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+    private CRServo clawServo = null;
+    private CRServo spinServo = null;
+    private CRServo extendServo = null;
 
     // Expansion Hub
     private DcMotor intakeMotor = null;
     private DcMotor duckMotor = null;
+    private DcMotor liftMotor = null;
 
     // Doubles for the power of our driving motors
     private double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
@@ -41,6 +46,10 @@ public class FreightFrenzyTeleOP extends OpMode
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
+        liftMotor = hardwareMap.dcMotor.get("liftMotor");
+       //clawServo = hardwareMap.crservo.get("clawServo");
+        //spinServo = hardwareMap.crservo.get("spinServo");
+       //extendServo = hardwareMap.crservo.get("extendServo");
 
         // Direction setting for the motors, depending on their physical orientation on the robot
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -49,6 +58,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         duckMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         telemetry.addData("", "Working");
         telemetry.addData("", "Last Update: 2021-10-26 16:46");
@@ -86,27 +96,26 @@ public class FreightFrenzyTeleOP extends OpMode
         backLeftMotor.setPower(powerScale * backLeftPan);
         backRightMotor.setPower(powerScale * backRightPan);
 
-        // Intake motor power: includes "boost" mode when right trigger is pressed
+        // Intake motor power: includes "boost" mode when right trigger is pressed, also includes reverse function
         if (gamepad1.right_trigger > 0)
         {
-            intakeMotor.setPower(0.9);
-        }
-        else if (gamepad1.a)
-        {
-            intakeMotor.setPower((0.0));
-        }
-        else if (gamepad1.b)
-        {
-            intakeMotor.setPower(-0.7);
+
+            if (gamepad1.right_bumper)
+            {
+                intakeMotor.setPower(-0.7);
+            }
+            else
+            {
+                intakeMotor.setPower(0.9);
+            }
         }
         else
         {
             intakeMotor.setPower(0.7);
         }
 
-
         // Duck carousel spinner
-        if (gamepad1.right_bumper)
+        if (gamepad1.touchpad)
         {
             telemetry.addData("duckPower: ", "" + duckPower);
             if (duckPower < duckMax)
@@ -120,6 +129,23 @@ public class FreightFrenzyTeleOP extends OpMode
             duckPower = 0.0;
             duckMotor.setPower(0.0);
         }
+
+        if (gamepad1.dpad_up)
+        {
+            liftMotor.setPower(0.8);
+        }
+        else if (gamepad1.dpad_down)
+        {
+            liftMotor.setPower(-0.8);
+        }
+        else
+        {
+            liftMotor.setPower(0.0);
+        }
+
+
+
+
     }
 
     @Override
