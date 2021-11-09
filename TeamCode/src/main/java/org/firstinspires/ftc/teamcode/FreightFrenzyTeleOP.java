@@ -35,6 +35,10 @@ public class FreightFrenzyTeleOP extends OpMode
 
     double duckMax = 0.8;
     double duckPower = 0.0;
+    double spinPos = -0.53;
+    double extendPos;
+
+    boolean spinning = false;
 
     @Override
     public void init ()
@@ -47,9 +51,9 @@ public class FreightFrenzyTeleOP extends OpMode
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        //clawServo = hardwareMap.crservo.get("clawServo");
-        //spinServo = hardwareMap.crservo.get("spinServo");
-        //extendServo = hardwareMap.crservo.get("extendServo");
+        clawServo = hardwareMap.crservo.get("clawServo");
+        spinServo = hardwareMap.crservo.get("spinServo");
+        extendServo = hardwareMap.crservo.get("extendServo");
 
         // Direction setting for the motors, depending on their physical orientation on the robot
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -144,15 +148,76 @@ public class FreightFrenzyTeleOP extends OpMode
             liftMotor.setPower(0.0);
         }
 
-        // Controls the opening and closing of the claw
+        // Controls the extending pf the claw arm
         if (gamepad1.right_bumper)
         {
-            extendServo.setPower(-0.34);
+            clawServo.setPower(-0.35);
         }
         else if (gamepad1.left_bumper)
         {
-            extendServo.setPower(-0.45);
+            clawServo.setPower(-0.025);
         }
+
+        // Controls the spinning of the pick-and-place
+        if (gamepad1.dpad_left && !spinning)
+        {
+            spinning = true;
+            spinPos += 0.044;
+        }
+        else if (gamepad1.dpad_right && !spinning)
+        {
+            spinning = true;
+            spinPos -= 0.044;
+        }
+        else if (gamepad1.triangle && !spinning) // center
+        {
+            spinning = true;
+            spinPos = -0.53;
+        }
+
+        if (!gamepad1.dpad_left && !gamepad1.dpad_right && spinning) // reset spinning flag
+        {
+            spinning = false;
+        }
+
+        // Clamp for spin motor
+        if (spinPos < -0.75)
+        {
+            spinPos = -0.75;
+        }
+        if (spinPos > -0.31)
+        {
+            spinPos = -0.31;
+        }
+
+        spinServo.setPower(spinPos);
+
+
+
+        if (gamepad1.cross)
+        {
+            extendPos += 0.002;
+        }
+        else if (gamepad1.circle)
+        {
+            extendPos -= 0.002;
+        }
+
+        // Clamp for extend motor
+        if (extendPos < -0.45)
+        {
+            extendPos = -0.45;
+        }
+        if (extendPos > -0.34)
+        {
+            extendPos = -0.34;
+        }
+
+        extendServo.setPower(extendPos);
+
+        telemetry.addData("Spin Position:", ""+spinPos);
+        telemetry.addData("Spinning Flag:", ""+spinning);
+
     }
 
     @Override
