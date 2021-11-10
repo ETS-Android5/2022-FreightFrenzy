@@ -196,25 +196,26 @@ public class FreightFrenzyTeleOP extends OpMode
 
         if (gamepad1.cross)
         {
-            extendPos += 0.002;
+            extendPos += 0.0002;
         }
         else if (gamepad1.circle)
         {
-            extendPos -= 0.002;
+            extendPos -= 0.0002;
         }
 
         // Clamp for extend motor
-        if (extendPos < -0.45)
+        /*if (extendPos < -0.45)
         {
             extendPos = -0.45;
         }
         if (extendPos > -0.34)
         {
             extendPos = -0.34;
-        }
+        }*/
 
         extendServo.setPower(extendPos);
 
+        telemetry.addData("Extend Postion: ", "" + extendPos);
         telemetry.addData("Spin Position:", ""+spinPos);
         telemetry.addData("Spinning Flag:", ""+spinning);
 
