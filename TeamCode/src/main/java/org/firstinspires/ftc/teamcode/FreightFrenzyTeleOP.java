@@ -36,9 +36,10 @@ public class FreightFrenzyTeleOP extends OpMode
     double duckMax = 0.8;
     double duckPower = 0.0;
     double spinPos = -0.53;
-    double extendPos;
+    double extendPos = 0.05;
 
     boolean spinning = false;
+    boolean extending = false;
 
     @Override
     public void init ()
@@ -137,11 +138,11 @@ public class FreightFrenzyTeleOP extends OpMode
         // Controls the vertical movement of the claw
         if (gamepad1.dpad_up)
         {
-            liftMotor.setPower(0.8);
+            liftMotor.setPower(0.9);
         }
         else if (gamepad1.dpad_down)
         {
-            liftMotor.setPower(-0.8);
+            liftMotor.setPower(-0.9);
         }
         else
         {
@@ -155,7 +156,7 @@ public class FreightFrenzyTeleOP extends OpMode
         }
         else if (gamepad1.left_bumper)
         {
-            clawServo.setPower(-0.025);
+            clawServo.setPower(-0.085);
         }
 
         // Controls the spinning of the pick-and-place
@@ -194,30 +195,49 @@ public class FreightFrenzyTeleOP extends OpMode
 
 
 
-        if (gamepad1.cross)
+        /*if (gamepad1.share)
         {
             extendPos += 0.0002;
         }
-        else if (gamepad1.circle)
+        else if (gamepad1.options)
         {
             extendPos -= 0.0002;
+        }*/
+
+
+
+        if (gamepad1.share && !extending)
+        {
+            extending = true;
+            spinPos += 0.05;
+        }
+        else if (gamepad1.options && !extending)
+        {
+            extending = true;
+            spinPos -= 0.05;
+        }
+
+        if (!gamepad1.options && !gamepad1.share && extending) // reset extending flag
+        {
+            extending = false;
         }
 
         // Clamp for extend motor
-        /*if (extendPos < -0.45)
+        if (extendPos > 0.05)
         {
-            extendPos = -0.45;
+            extendPos = 0.05;
         }
-        if (extendPos > -0.34)
+        if (extendPos < -0.6)
         {
-            extendPos = -0.34;
-        }*/
+            extendPos = -0.6;
+        }
 
         extendServo.setPower(extendPos);
 
         telemetry.addData("Extend Postion: ", "" + extendPos);
         telemetry.addData("Spin Position:", ""+spinPos);
         telemetry.addData("Spinning Flag:", ""+spinning);
+        telemetry.addData("Extending Flag:", ""+extending);
 
     }
 
