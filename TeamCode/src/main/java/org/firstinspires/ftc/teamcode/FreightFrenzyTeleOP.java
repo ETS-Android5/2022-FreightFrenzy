@@ -77,9 +77,9 @@ public class FreightFrenzyTeleOP extends OpMode
     @Override
     public void loop()
     {
-        double drive = gamepad1.left_stick_y;
+        double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
-        double pan = gamepad1.left_stick_x;
+        double pan = -gamepad1.left_stick_x;
 
         // Driving controls
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -104,15 +104,11 @@ public class FreightFrenzyTeleOP extends OpMode
         // Intake motor power: includes "boost" mode when right trigger is pressed, also includes reverse function
         if (gamepad1.right_trigger > 0)
         {
-
-            if (gamepad1.right_bumper)
-            {
-                intakeMotor.setPower(-0.7);
-            }
-            else
-            {
-                intakeMotor.setPower(0.9);
-            }
+            intakeMotor.setPower(0.9);
+        }
+        else if(gamepad1.left_trigger > 0)
+        {
+            intakeMotor.setPower(-0.7);
         }
         else
         {
@@ -138,11 +134,11 @@ public class FreightFrenzyTeleOP extends OpMode
         // Controls the vertical movement of the claw
         if (gamepad1.dpad_up)
         {
-            liftMotor.setPower(0.9);
+            liftMotor.setPower(1.0);
         }
         else if (gamepad1.dpad_down)
         {
-            liftMotor.setPower(-0.9);
+            liftMotor.setPower(-1.0);
         }
         else
         {
@@ -152,11 +148,11 @@ public class FreightFrenzyTeleOP extends OpMode
         // Controls the extending pf the claw arm
         if (gamepad1.right_bumper)
         {
-            clawServo.setPower(-0.35);
+            clawServo.setPower(-0.348);
         }
         else if (gamepad1.left_bumper)
         {
-            clawServo.setPower(-0.085);
+            clawServo.setPower(-0.13);
         }
 
         // Controls the spinning of the pick-and-place
@@ -191,30 +187,16 @@ public class FreightFrenzyTeleOP extends OpMode
             spinPos = -0.31;
         }
 
-        spinServo.setPower(spinPos);
-
-
-
-        /*if (gamepad1.share)
-        {
-            extendPos += 0.0002;
-        }
-        else if (gamepad1.options)
-        {
-            extendPos -= 0.0002;
-        }*/
-
-
 
         if (gamepad1.share && !extending)
         {
             extending = true;
-            spinPos += 0.05;
+            extendPos += 0.06875;
         }
         else if (gamepad1.options && !extending)
         {
             extending = true;
-            spinPos -= 0.05;
+            extendPos -= 0.06875;
         }
 
         if (!gamepad1.options && !gamepad1.share && extending) // reset extending flag
@@ -232,6 +214,7 @@ public class FreightFrenzyTeleOP extends OpMode
             extendPos = -0.6;
         }
 
+        spinServo.setPower(spinPos);
         extendServo.setPower(extendPos);
 
         telemetry.addData("Extend Postion: ", "" + extendPos);
