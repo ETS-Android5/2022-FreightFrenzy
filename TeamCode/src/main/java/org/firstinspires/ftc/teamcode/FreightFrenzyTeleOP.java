@@ -148,6 +148,18 @@ public class FreightFrenzyTeleOP extends OpMode
             duckMotor.setPower(0.0);
         }
 
+
+        // toggle between "debug" mode for claw height
+        if (!debugToggle && gamepad1.square)
+        {
+            debug = !debug;
+            debugToggle = true;
+        }
+        if (debugToggle && !gamepad1.square)
+        {
+            debugToggle = false;
+        }
+
         // Controls the vertical movement of the claw
         if (!debug)
         {
@@ -166,11 +178,40 @@ public class FreightFrenzyTeleOP extends OpMode
                 // corrects position if claw goes below or above limit
                 if (liftMotorPos > liftMotorMax)
                 {
-                    liftMotor.setPower(-0.1);
+                    liftMotor.setPower(-0.3);
                 }
                 else if (liftMotorPos < liftMotorZero)
                 {
-                    liftMotor.setPower(0.1);
+                    liftMotor.setPower(0.3);
+                }
+                else
+                {
+                    liftMotor.setPower(0.0);
+                }
+            }
+        }
+        else
+        {
+            // does not allow the claw to go above the max position
+            if (gamepad1.dpad_up && liftMotorPos <= liftMotorMax)
+            {
+                liftMotor.setPower(1.0);
+            }
+            //  does not allow the claw to go below the max position
+            if (gamepad1.dpad_down && liftMotorPos >= liftMotorMin)
+            {
+                liftMotor.setPower(-1.0);
+            }
+            if (!gamepad1.dpad_up && !gamepad1.dpad_down)
+            {
+                // corrects position if claw goes below or above limit
+                if (liftMotorPos > liftMotorMax)
+                {
+                    liftMotor.setPower(-0.3);
+                }
+                else if (liftMotorPos < liftMotorMin)
+                {
+                    liftMotor.setPower(0.3);
                 }
                 else
                 {
