@@ -244,7 +244,7 @@ public class FreightFrenzyTeleOP extends OpMode
         else if (gamepad1.triangle && !spinning) // center
         {
             spinning = true;
-            spinPos = -0.53;
+            spinPos = -0.65;
         }
 
         if (!gamepad1.dpad_left && !gamepad1.dpad_right && spinning) // reset spinning flag
@@ -253,13 +253,13 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
         // Clamp for spin motor
-        if (spinPos < -0.75)
+        if (spinPos < -0.773)
         {
-            spinPos = -0.75;
+            spinPos = -0.773;
         }
-        if (spinPos > -0.31)
+        if (spinPos > -0.392)
         {
-            spinPos = -0.31;
+            spinPos = -0.392;
         }
 
 
@@ -280,13 +280,13 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
         // Clamp for extend motor
-        if (extendPos > 0.05)
+        if (extendPos > 0.19)
         {
-            extendPos = 0.05;
+            extendPos = 0.19;
         }
-        if (extendPos < -0.6)
+        if (extendPos < -0.44)
         {
-            extendPos = -0.6;
+            extendPos = -0.44;
         }
 
         spinServo.setPower(spinPos);
