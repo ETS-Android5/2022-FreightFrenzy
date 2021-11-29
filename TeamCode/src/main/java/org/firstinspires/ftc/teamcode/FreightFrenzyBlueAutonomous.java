@@ -29,58 +29,123 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-/**
- * This 2020-2021 OpMode illustrates the basics of using the TensorFlow Object Detection API to
- * determine the position of the Freight Frenzy game elements.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
- */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-public class ConceptTensorFlowObjectDetection extends LinearOpMode {
-  /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
-   * the following 4 detectable objects
-   *  0: Ball,
-   *  1: Cube,
-   *  2: Duck,
-   *  3: Marker (duck location tape marker)
-   *
-   *  Two additional model assets are available which only contain a subset of the objects:
-   *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
-   *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
-   */
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+@Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
+public class FreightFrenzyBlueAutonomous extends LinearOpMode {
+    private static final String D_FORWARD = "forward";
+    private static final String D_BACKWARD = "backward";
+    private static final String D_STOP = "stop";
+    private static final String T_LEFT = "turn left";
+    private static final String T_RIGHT = "turn right";
+    private static final String T_STOP = "stop turning";
+    private static final String P_LEFT = "pan left";
+    private static final String P_RIGHT = "pan right";
+    private static final String P_STOP = "stop panning";
+
+    private long loopCount = 0;
+    private boolean duckFound = false;
+    private float duckCoordinate = -1;
+    private int duckPosition = 0;
+
+    private DcMotor frontLeftMotor = null;
+    private DcMotor frontRightMotor = null;
+    private DcMotor backLeftMotor = null;
+    private DcMotor backRightMotor = null;
+
+    public void drive (String fb)
+    {
+        if (fb.equals("forward"))
+        {
+            frontLeftMotor.setPower(0.3);
+            frontRightMotor.setPower(0.3);
+            backLeftMotor.setPower(0.3);
+            backRightMotor.setPower(0.3);
+        }
+        if (fb.equals("backward"))
+        {
+            frontLeftMotor.setPower(-0.3);
+            frontRightMotor.setPower(-0.3);
+            backLeftMotor.setPower(-0.3);
+            backRightMotor.setPower(-0.3);
+        }
+        if (fb.equals("stop"))
+        {
+            frontLeftMotor.setPower(0.0);
+            frontRightMotor.setPower(0.0);
+            backLeftMotor.setPower(0.0);
+            backRightMotor.setPower(0.0);
+        }
+    }
+
+    public void turn (String lr)
+    {
+        if (lr.equals("turn left"))
+        {
+            frontLeftMotor.setPower(-0.15);
+            frontRightMotor.setPower(0.15);
+            backLeftMotor.setPower(-0.15);
+            backRightMotor.setPower(0.15);
+        }
+        if (lr.equals("turn right"))
+        {
+            frontLeftMotor.setPower(0.15);
+            frontRightMotor.setPower(-0.15);
+            backLeftMotor.setPower(0.15);
+            backRightMotor.setPower(-0.15);
+        }
+        if (lr.equals("stop turning"))
+        {
+            frontLeftMotor.setPower(0.0);
+            frontRightMotor.setPower(0.0);
+            backLeftMotor.setPower(0.0);
+            backRightMotor.setPower(0.0);
+        }
+    }
+
+    public void pan (String lr)
+    {
+        if (lr.equals("pan left"))
+        {
+            frontLeftMotor.setPower(-0.3);
+            frontRightMotor.setPower(-0.3);
+            backLeftMotor.setPower(0.3);
+            backRightMotor.setPower(0.3);
+        }
+        if (lr.equals("pan right"))
+        {
+            frontLeftMotor.setPower(0.3);
+            frontRightMotor.setPower(0.3);
+            backLeftMotor.setPower(-0.3);
+            backRightMotor.setPower(-0.3);
+        }
+        if (lr.equals("stop panning"))
+        {
+            frontLeftMotor.setPower(0.0);
+            frontRightMotor.setPower(0.0);
+            backLeftMotor.setPower(0.0);
+            backRightMotor.setPower(0.0);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_DM.tflite";
     private static final String[] LABELS = {
-      "Ball",
-      "Cube",
       "Duck",
       "Marker"
     };
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY =
             "AX54Lyj/////AAABmSsIALipi0y4oiZBAoZS4o4Jppp+qbLTWgVQVVuyveVi7sLhVC8XAwvTGDzKpxm1tiMRMLgYEV3Y5YXvqKMiA7R7TUZQcZeyL9MMGoqcq7rIeFMX01KOuZUmfs754hgbnsINn38JjhLLAH3g2GuKF9QZBF/CJqw/UFKKzR8bDlv4TkkTP8AyxvF9Vyv9G9gQhK2HoOWuSCWQHzIWl+op5LEPLXU7RmdrWzxDm1zEY3DZoax5pYLMRR349NoNzpUFBzwNu+nmEzT3eXQqtppz/vE/gHA0LRys9MAktPmeXQfvaS2YUi4UdE4PcFxfCUPuWe6L9xOQmUBE7hB39jTRkYxGADmTxILyBZB6fD3qyFHv";
 
@@ -98,6 +163,18 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // control hub 1
+        frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
+        frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
+        backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
+        backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+
+        //setting the direction for each motor
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -116,7 +193,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0);
+            tfod.setZoom(1.0, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
@@ -127,9 +204,11 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 if (tfod != null) {
+                    long initTime = System.currentTimeMillis();
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    List<String> labels = new ArrayList<String>();
                     if (updatedRecognitions != null) {
                       telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -142,8 +221,53 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
                         i++;
+                        labels.add(recognition.getLabel());
+                        duckCoordinate = recognition.getLeft();
                       }
                       telemetry.update();
+
+                      long finalTime = System.currentTimeMillis() - initTime;
+                      loopCount += 1;
+
+                        telemetry.addData("Loop count:", loopCount);
+                        telemetry.addData("Time is:", finalTime);
+                        telemetry.addData("Ms/loop", finalTime / loopCount);
+
+                      if (finalTime > 1000 && !duckFound)
+                      {
+                          if (duckCoordinate >= 0 && duckCoordinate < 640)
+                          {
+                              duckPosition = 1;
+                          }
+                          else if (duckCoordinate >= 640)
+                          {
+                              duckPosition = 2;
+                          }
+                          else
+                          {
+                              duckPosition = 3;
+                          }
+                          duckFound = true;
+                      }
+                      if (finalTime < 5000 && finalTime > 1000)
+                      {
+                          if (duckPosition == 1)
+                          {
+                              pan(P_LEFT);
+                          }
+                          if (duckPosition == 2)
+                          {
+                              pan(P_RIGHT);
+                          }
+                          if (duckPosition == 3)
+                          {
+                              drive(D_FORWARD);
+                          }
+                      }
+                      if (finalTime > 5000)
+                      {
+                          drive(D_STOP);
+                      }
                     }
                 }
             }
