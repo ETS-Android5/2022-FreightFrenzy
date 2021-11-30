@@ -49,7 +49,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private static final String STOP = "stop";
     private static final String LEFT = "left";
     private static final String RIGHT = "right";
-    private static final String ON = "on";
+    private static final Boolean ON = true;
+    private static final Boolean OFF = false;
 
     private double duckPower = 0.0;
 
@@ -58,6 +59,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private float duckCoordinate = -1;
     private int duckPosition = 0;
     private int resetTime = 0;
+    private boolean timeReset = false;
 
     private DcMotor frontLeftMotor = null;
     private DcMotor frontRightMotor = null;
@@ -147,7 +149,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         {
             if (duckPower < 0.8)
             {
-                duckPower += 0.005;
+                duckPower += 0.02;
             }
         }
         else
@@ -251,7 +253,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
                         telemetry.addData("Loop count:", loopCount);
                         telemetry.addData("Time is:", finalTime);
-                        telemetry.addData("Ms/loop", finalTime / loopCount);
+                        telemetry.addData("Ms/loop:", finalTime / loopCount);
+                        telemetry.addData("Duck position: ", duckPosition);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1000 && !duckFound)
@@ -270,12 +273,36 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             duckFound = true;
                             resetTime = 1;
-                            initTime = System.currentTimeMillis();
                         }
                         // spin duck wheel
-                        if (finalTime < 1500 && resetTime == 1)
+                        if (resetTime == 1)
                         {
-
+                            if (!timeReset)
+                            {
+                                initTime = System.currentTimeMillis();
+                                timeReset = true;
+                            }
+                            if (finalTime < 750)
+                            {
+                                drive(FORWARD);
+                            }
+                            if (finalTime < 850 && finalTime > 750)
+                            {
+                                drive(STOP);
+                            }
+                            if (finalTime < 3150 && finalTime > 850)
+                            {
+                                pan(RIGHT);
+                            }
+                            if (finalTime < 6150 && finalTime > 3150)
+                            {
+                                pan(STOP);
+                                duck(ON);
+                            }
+                            if (finalTime > 6150)
+                            {
+                                duck(OFF);
+                            }
                         }
                     }
                 }
