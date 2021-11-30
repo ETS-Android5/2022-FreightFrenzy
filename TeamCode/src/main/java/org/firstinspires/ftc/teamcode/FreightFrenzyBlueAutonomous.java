@@ -44,25 +44,27 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
 public class FreightFrenzyBlueAutonomous extends LinearOpMode {
-    private static final String D_FORWARD = "forward";
-    private static final String D_BACKWARD = "backward";
-    private static final String D_STOP = "stop";
-    private static final String T_LEFT = "turn left";
-    private static final String T_RIGHT = "turn right";
-    private static final String T_STOP = "stop turning";
-    private static final String P_LEFT = "pan left";
-    private static final String P_RIGHT = "pan right";
-    private static final String P_STOP = "stop panning";
+    private static final String FORWARD = "forward";
+    private static final String BACKWARD = "backward";
+    private static final String STOP = "stop";
+    private static final String LEFT = "left";
+    private static final String RIGHT = "right";
+    private static final String ON = "on";
+
+    private double duckPower = 0.0;
 
     private long loopCount = 0;
     private boolean duckFound = false;
     private float duckCoordinate = -1;
     private int duckPosition = 0;
+    private int resetTime = 0;
 
     private DcMotor frontLeftMotor = null;
     private DcMotor frontRightMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+
+    private DcMotor duckMotor = null;
 
     public void drive (String fb)
     {
@@ -91,21 +93,21 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     public void turn (String lr)
     {
-        if (lr.equals("turn left"))
+        if (lr.equals("left"))
         {
             frontLeftMotor.setPower(-0.15);
             frontRightMotor.setPower(0.15);
             backLeftMotor.setPower(-0.15);
             backRightMotor.setPower(0.15);
         }
-        if (lr.equals("turn right"))
+        if (lr.equals("right"))
         {
             frontLeftMotor.setPower(0.15);
             frontRightMotor.setPower(-0.15);
             backLeftMotor.setPower(0.15);
             backRightMotor.setPower(-0.15);
         }
-        if (lr.equals("stop turning"))
+        if (lr.equals("stop"))
         {
             frontLeftMotor.setPower(0.0);
             frontRightMotor.setPower(0.0);
@@ -116,27 +118,43 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     public void pan (String lr)
     {
-        if (lr.equals("pan left"))
+        if (lr.equals("left"))
         {
             frontLeftMotor.setPower(-0.3);
             frontRightMotor.setPower(-0.3);
             backLeftMotor.setPower(0.3);
             backRightMotor.setPower(0.3);
         }
-        if (lr.equals("pan right"))
+        if (lr.equals("right"))
         {
             frontLeftMotor.setPower(0.3);
             frontRightMotor.setPower(0.3);
             backLeftMotor.setPower(-0.3);
             backRightMotor.setPower(-0.3);
         }
-        if (lr.equals("stop panning"))
+        if (lr.equals("stop"))
         {
             frontLeftMotor.setPower(0.0);
             frontRightMotor.setPower(0.0);
             backLeftMotor.setPower(0.0);
             backRightMotor.setPower(0.0);
         }
+    }
+
+    public void duck (Boolean quack)
+    {
+        if (quack)
+        {
+            if (duckPower < 0.8)
+            {
+                duckPower += 0.005;
+            }
+        }
+        else
+        {
+            duckPower = 0.0;
+        }
+        duckMotor.setPower(duckPower);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,12 +186,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         backLeftMotor = hardwareMap.dcMotor.get("backLeftMotor");
         backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
+        duckMotor = hardwareMap.dcMotor.get("duckMotor");
 
         //setting the direction for each motor
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        duckMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -202,72 +222,61 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
+            long initTime = System.currentTimeMillis();
             while (opModeIsActive()) {
                 if (tfod != null) {
-                    long initTime = System.currentTimeMillis();
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     List<String> labels = new ArrayList<String>();
                     if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-                      // step through the list of recognitions and display boundary info.
-                      int i = 0;
-                      for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                          recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
-                        i++;
-                        labels.add(recognition.getLabel());
-                        duckCoordinate = recognition.getLeft();
-                      }
-                      telemetry.update();
+                        // step through the list of recognitions and display boundary info.
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+                            i++;
+                            labels.add(recognition.getLabel());
+                            duckCoordinate = recognition.getLeft();
+                        }
+                        telemetry.update();
 
-                      long finalTime = System.currentTimeMillis() - initTime;
-                      loopCount += 1;
+                        long finalTime = System.currentTimeMillis() - initTime;
+                        loopCount += 1;
 
                         telemetry.addData("Loop count:", loopCount);
                         telemetry.addData("Time is:", finalTime);
                         telemetry.addData("Ms/loop", finalTime / loopCount);
 
-                      if (finalTime > 1000 && !duckFound)
-                      {
-                          if (duckCoordinate >= 0 && duckCoordinate < 640)
-                          {
-                              duckPosition = 1;
-                          }
-                          else if (duckCoordinate >= 640)
-                          {
-                              duckPosition = 2;
-                          }
-                          else
-                          {
-                              duckPosition = 3;
-                          }
-                          duckFound = true;
-                      }
-                      if (finalTime < 5000 && finalTime > 1000)
-                      {
-                          if (duckPosition == 1)
-                          {
-                              pan(P_LEFT);
-                          }
-                          if (duckPosition == 2)
-                          {
-                              pan(P_RIGHT);
-                          }
-                          if (duckPosition == 3)
-                          {
-                              drive(D_FORWARD);
-                          }
-                      }
-                      if (finalTime > 5000)
-                      {
-                          drive(D_STOP);
-                      }
+                        // initial step - detect what position duck/team element is in
+                        if (finalTime > 1000 && !duckFound)
+                        {
+                            if (duckCoordinate >= 0 && duckCoordinate < 640)
+                            {
+                                duckPosition = 1;
+                            }
+                            else if (duckCoordinate >= 640)
+                            {
+                                duckPosition = 2;
+                            }
+                            else
+                            {
+                                duckPosition = 3;
+                            }
+                            duckFound = true;
+                            resetTime = 1;
+                            initTime = System.currentTimeMillis();
+                        }
+                        // spin duck wheel
+                        if (finalTime < 1500 && resetTime == 1)
+                        {
+
+                        }
                     }
                 }
             }
