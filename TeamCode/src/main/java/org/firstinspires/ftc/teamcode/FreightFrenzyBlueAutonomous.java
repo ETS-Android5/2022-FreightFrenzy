@@ -149,7 +149,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         {
             if (duckPower < 0.8)
             {
-                duckPower += 0.02;
+                duckPower += 0.05;
             }
         }
         else
