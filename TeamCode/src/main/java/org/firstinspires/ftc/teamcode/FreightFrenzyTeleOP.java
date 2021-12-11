@@ -40,8 +40,8 @@ public class FreightFrenzyTeleOP extends OpMode
 
     double duckMax = 0.8;
     double duckPower = 0.0;
-    double spinPos = -0.53;
-    double extendPos = 0.05;
+    double spinPos = -0.0777;
+    double extendPos = -0.56;
 
     boolean spinning = false;
     boolean extending = false;
@@ -94,9 +94,9 @@ public class FreightFrenzyTeleOP extends OpMode
 
         liftMotorPos = liftMotor.getCurrentPosition();
 
-        double drive = -gamepad1.left_stick_y;
+        double drive = gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
-        double pan = -gamepad1.left_stick_x;
+        double pan = gamepad1.left_stick_x;
 
         // Driving controls
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -164,16 +164,20 @@ public class FreightFrenzyTeleOP extends OpMode
         if (!debug)
         {
             // does not allow the claw to go above the max position
-            if (gamepad1.dpad_up && liftMotorPos <= liftMotorMax)
+            if (gamepad1.dpad_up)// && liftMotorPos <= liftMotorMax)
             {
                 liftMotor.setPower(1.0);
             }
             //  does not allow the claw to go below the max position
-            if (gamepad1.dpad_down && liftMotorPos >= liftMotorZero)
+            else if (gamepad1.dpad_down)// && liftMotorPos >= liftMotorZero)
             {
                 liftMotor.setPower(-1.0);
             }
-            if (!gamepad1.dpad_up && !gamepad1.dpad_down)
+            else
+            {
+                liftMotor.setPower(0.0);
+            }
+            /*if (!gamepad1.dpad_up && !gamepad1.dpad_down)
             {
                 // corrects position if claw goes below or above limit
                 if (liftMotorPos > liftMotorMax)
@@ -188,21 +192,25 @@ public class FreightFrenzyTeleOP extends OpMode
                 {
                     liftMotor.setPower(0.0);
                 }
-            }
+            }*/
         }
         else
         {
             // does not allow the claw to go above the max position
-            if (gamepad1.dpad_up && liftMotorPos <= liftMotorMax)
+            if (gamepad1.dpad_up) //&& liftMotorPos <= liftMotorMax)
             {
                 liftMotor.setPower(1.0);
             }
             //  does not allow the claw to go below the max position
-            if (gamepad1.dpad_down && liftMotorPos >= liftMotorMin)
+            else if (gamepad1.dpad_down) // && liftMotorPos >= liftMotorMin)
             {
                 liftMotor.setPower(-1.0);
             }
-            if (!gamepad1.dpad_up && !gamepad1.dpad_down)
+            else
+            {
+                liftMotor.setPower(0.0);
+            }
+            /*if (!gamepad1.dpad_up && !gamepad1.dpad_down)
             {
                 // corrects position if claw goes below or above limit
                 if (liftMotorPos > liftMotorMax)
@@ -217,17 +225,17 @@ public class FreightFrenzyTeleOP extends OpMode
                 {
                     liftMotor.setPower(0.0);
                 }
-            }
+            }*/
         }
 
         // Controls the extending pf the claw arm
         if (gamepad1.right_bumper)
         {
-            clawServo.setPower(-0.348);
+            clawServo.setPower(-0.38);
         }
         else if (gamepad1.left_bumper)
         {
-            clawServo.setPower(-0.13);
+            clawServo.setPower(-0.09);
         }
 
         // Controls the spinning of the pick-and-place
@@ -244,7 +252,7 @@ public class FreightFrenzyTeleOP extends OpMode
         else if (gamepad1.triangle && !spinning) // center
         {
             spinning = true;
-            spinPos = -0.65;
+            spinPos = -0.0777;
         }
 
         if (!gamepad1.dpad_left && !gamepad1.dpad_right && spinning) // reset spinning flag
@@ -253,13 +261,13 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
         // Clamp for spin motor
-        if (spinPos < -0.773)
+        if (spinPos < -0.11)
         {
-            spinPos = -0.773;
+            spinPos = -0.11;
         }
-        if (spinPos > -0.392)
+        if (spinPos > 0.3)
         {
-            spinPos = -0.392;
+            spinPos = 0.3;
         }
 
 
@@ -280,13 +288,13 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
         // Clamp for extend motor
-        if (extendPos > 0.19)
+        if (extendPos > -0.12)
         {
-            extendPos = 0.19;
+            extendPos = -0.12;
         }
-        if (extendPos < -0.44)
+        if (extendPos < -0.56)
         {
-            extendPos = -0.44;
+            extendPos = -0.56;
         }
 
         spinServo.setPower(spinPos);

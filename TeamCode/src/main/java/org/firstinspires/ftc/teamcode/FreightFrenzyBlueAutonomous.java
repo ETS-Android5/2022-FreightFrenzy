@@ -55,9 +55,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private double duckPower = 0.0;
 
     private long loopCount = 0;
-    private boolean duckFound = false;
-    private float duckCoordinate = -1;
-    private int duckPosition = 0;
+    private boolean elementFound = false;
+    private float elementCoordinate = -1;
+    private int elementPosition = 0;
     private int resetTime = 0;
     private boolean timeReset = false;
 
@@ -160,10 +160,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_DM.tflite";
-    private static final String[] LABELS = {
-      "Duck",
-      "Marker"
+    private static final String TFOD_MODEL_ASSET = "amogus.tflite";
+    private static final String[] LABELS =
+    {
+      "element"
     };
 
     private static final String VUFORIA_KEY =
@@ -244,7 +244,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     recognition.getRight(), recognition.getBottom());
                             i++;
                             labels.add(recognition.getLabel());
-                            duckCoordinate = recognition.getLeft();
+                            elementCoordinate = recognition.getLeft();
                         }
                         telemetry.update();
 
@@ -254,24 +254,24 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("Loop count:", loopCount);
                         telemetry.addData("Time is:", finalTime);
                         telemetry.addData("Ms/loop:", finalTime / loopCount);
-                        telemetry.addData("Duck position: ", duckPosition);
+                        telemetry.addData("Element position: ", elementPosition);
 
                         // initial step - detect what position duck/team element is in
-                        if (finalTime > 1000 && !duckFound)
+                        if (finalTime > 1000 && !elementFound)
                         {
-                            if (duckCoordinate >= 0 && duckCoordinate < 640)
+                            if (elementCoordinate >= 0 && elementCoordinate < 640)
                             {
-                                duckPosition = 1;
+                                elementPosition = 1;
                             }
-                            else if (duckCoordinate >= 640)
+                            else if (elementCoordinate >= 640)
                             {
-                                duckPosition = 2;
+                                elementPosition = 2;
                             }
                             else
                             {
-                                duckPosition = 3;
+                                elementPosition = 3;
                             }
-                            duckFound = true;
+                            elementFound = true;
                             resetTime = 1;
                         }
                         // spin duck wheel
