@@ -68,9 +68,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private DcMotor duckMotor = null;
 
-    private int drive1 = 500;
+    private int drive1 = 400;
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 2500;
+    private int pan1 = stop1 + 3000;
     private int duck1 = pan1 + 3700;
 
     public void drive (String fb)
