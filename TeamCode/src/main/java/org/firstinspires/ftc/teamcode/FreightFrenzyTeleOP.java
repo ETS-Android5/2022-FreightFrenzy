@@ -64,7 +64,7 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        liftMotorZero = liftMotor.getCurrentPosition()+ 300;
+        liftMotorZero = liftMotor.getCurrentPosition()+ 600;
         
         clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
@@ -93,13 +93,13 @@ public class FreightFrenzyTeleOP extends OpMode
 
     private void autoHoming()
     {
-        long retractTime = startHomeFrame + 600; // how long it takes to retract arm
-        long centerTime = retractTime + 800; // how long it takes to center and lower arm
+        long retractTime = startHomeFrame + 700; // how long it takes to retract arm
+        long centerTime = retractTime + 600; // how long it takes to center and lower arm
 
 
-        if (extendPos != -0.6)
+        if (extendPos != -0.55)
         {
-            extendPos = -0.6;
+            extendPos = -0.55;
         }
 
         if (spinPos != -0.0777)
@@ -223,7 +223,7 @@ public class FreightFrenzyTeleOP extends OpMode
         }
         else if (gamepad1.left_bumper)
         {
-            clawServo.setPower(-0.15);
+            clawServo.setPower(-0.175);
         }
         else if (gamepad1.share)
         {
@@ -275,7 +275,7 @@ public class FreightFrenzyTeleOP extends OpMode
         }
         else if (gamepad1.options)
         {
-            extendServo.setPower(-0.6);
+            extendServo.setPower(-0.55);
         }
 
         if (!gamepad1.circle && !gamepad1.square && extending) // reset extending flag
