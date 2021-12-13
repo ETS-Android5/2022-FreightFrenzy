@@ -70,9 +70,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int drive1 = 400;
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 2850;
+    private int pan1 = stop1 + 2950;
     private int duck1 = pan1 + 3200;
-    private int pan2 = duck1 + 750;
+    private int pan2 = duck1 + 1250;
     private int drive2 = pan2 + 750;
 
     public void drive (String fb)
@@ -256,15 +256,24 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.update();
 
                         long finalTime = System.currentTimeMillis() - initTime;
+                        long timeDifference = 0;
                         loopCount += 1;
 
                         telemetry.addData("Loop count:", loopCount);
-                        telemetry.addData("Time is:", finalTime);
-                        telemetry.addData("Ms/loop:", finalTime / loopCount);
+                        if (resetTime == 0)
+                        {
+                            telemetry.addData("Time is:", finalTime);
+                            telemetry.addData("Ms/loop:", finalTime / loopCount);
+                        }
+                        if (resetTime == 1)
+                        {
+                            telemetry.addData("Time is:", finalTime + timeDifference);
+                            telemetry.addData("Ms/loop:", (finalTime + timeDifference) / loopCount);
+                        }
                         telemetry.addData("Element position: ", elementPosition);
 
                         // initial step - detect what position duck/team element is in
-                        if (finalTime > 1000 && !elementFound)
+                        if (finalTime > 1500 && !elementFound)
                         {
                             if (elementCoordinate >= 0 && elementCoordinate < 640)
                             {
@@ -286,6 +295,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         {
                             if (!timeReset)
                             {
+                                timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
                                 timeReset = true;
                             }
@@ -351,7 +361,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.7f;
+        tfodParameters.minResultConfidence = 0.8f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
