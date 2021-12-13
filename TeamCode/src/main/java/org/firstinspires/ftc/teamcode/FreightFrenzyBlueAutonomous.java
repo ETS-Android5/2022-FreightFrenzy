@@ -282,24 +282,24 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 initTime = System.currentTimeMillis();
                                 timeReset = true;
                             }
-                            if (finalTime < 750)
+                            /*if (finalTime < 750)
                             {
                                 drive(FORWARD);
                             }
                             if (finalTime < 850 && finalTime > 750)
                             {
                                 drive(STOP);
-                            }
-                            if (finalTime < 3150 && finalTime > 850)
+                            }*/
+                            if (finalTime < 2300)
                             {
                                 pan(RIGHT);
                             }
-                            if (finalTime < 6650 && finalTime > 3150)
+                            if (finalTime < 5800 && finalTime > 2300)
                             {
                                 pan(STOP);
                                 duck(ON);
                             }
-                            if (finalTime > 6650)
+                            if (finalTime > 5800)
                             {
                                 drive(STOP);
                                 duck(OFF);
