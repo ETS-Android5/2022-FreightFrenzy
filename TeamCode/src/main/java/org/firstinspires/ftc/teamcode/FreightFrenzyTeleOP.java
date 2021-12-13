@@ -29,7 +29,6 @@ public class FreightFrenzyTeleOP extends OpMode
     private int liftMotorPos;
     private int liftMotorZero;
     private int liftMotorMax;
-    private int liftMotorMin;
 
     // Doubles for the power of our driving motors
     private double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
@@ -45,8 +44,13 @@ public class FreightFrenzyTeleOP extends OpMode
 
     boolean spinning = false;
     boolean extending = false;
-    boolean debug = false;
-    boolean debugToggle = false;
+
+    private boolean autoHome = false;
+
+    //frames
+    private long currentFrame;
+    private long startHomeFrame;
+
 
     @Override
     public void init ()
@@ -60,7 +64,7 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        liftMotorZero = liftMotor.getCurrentPosition();
+        liftMotorZero = liftMotor.getCurrentPosition()+ 300;
         
         clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
@@ -77,6 +81,9 @@ public class FreightFrenzyTeleOP extends OpMode
 
         telemetry.addData("", "Working");
         telemetry.addData("", "Last Update: 2021-11-08 16:57");
+
+        currentFrame = 0;
+        startHomeFrame = 0;
     }
     @Override
     public void init_loop()
@@ -84,13 +91,58 @@ public class FreightFrenzyTeleOP extends OpMode
         // pls do
     }
 
+    private void autoHoming()
+    {
+        long retractTime = startHomeFrame + 600; // how long it takes to retract arm
+        long centerTime = retractTime + 800; // how long it takes to center and lower arm
+
+
+        if (extendPos != -0.6)
+        {
+            extendPos = -0.6;
+        }
+
+        if (spinPos != -0.0777)
+        {
+            spinPos = -0.0777;
+        }
+
+        if(liftMotorPos > liftMotorZero)
+        {
+            liftMotor.setPower(-1.0);
+        }
+        else
+        {
+            liftMotor.setPower(0.0);
+        }
+
+        if (currentFrame > startHomeFrame && currentFrame <= retractTime)
+        {
+            extendServo.setPower(extendPos);
+            telemetry.addData("Retracting","");
+        }
+        if (currentFrame > retractTime && currentFrame <= centerTime) // raising
+        {
+            spinServo.setPower(spinPos);
+            //liftMotor.setTargetPosition(liftMotorZero);
+            telemetry.addData("Centering and Lowering","");
+        }
+        if (currentFrame > centerTime)
+        {
+            // stop
+            autoHome = false;
+        }
+    }
+
     @Override
     public void loop()
     {
-        // sets min and max positions
+        // sets max positions
         // change these value later
         liftMotorMax = liftMotorZero + 7000;
-        liftMotorMin = liftMotorZero - 500;
+
+        //frame incrementer
+        currentFrame += 1;
 
         liftMotorPos = liftMotor.getCurrentPosition();
 
@@ -148,84 +200,20 @@ public class FreightFrenzyTeleOP extends OpMode
             duckMotor.setPower(0.0);
         }
 
-
-        // toggle between "debug" mode for claw height
-        if (!debugToggle && gamepad1.square)
-        {
-            debug = !debug;
-            debugToggle = true;
-        }
-        if (debugToggle && !gamepad1.square)
-        {
-            debugToggle = false;
-        }
-
         // Controls the vertical movement of the claw
-        if (!debug)
+        // does not allow the claw to go above the max position
+        if (gamepad1.dpad_up)
         {
-            // does not allow the claw to go above the max position
-            if (gamepad1.dpad_up)// && liftMotorPos <= liftMotorMax)
-            {
-                liftMotor.setPower(1.0);
-            }
-            //  does not allow the claw to go below the max position
-            else if (gamepad1.dpad_down)// && liftMotorPos >= liftMotorZero)
-            {
-                liftMotor.setPower(-1.0);
-            }
-            else
-            {
-                liftMotor.setPower(0.0);
-            }
-            /*if (!gamepad1.dpad_up && !gamepad1.dpad_down)
-            {
-                // corrects position if claw goes below or above limit
-                if (liftMotorPos > liftMotorMax)
-                {
-                    liftMotor.setPower(-0.3);
-                }
-                else if (liftMotorPos < liftMotorZero)
-                {
-                    liftMotor.setPower(0.3);
-                }
-                else
-                {
-                    liftMotor.setPower(0.0);
-                }
-            }*/
+            liftMotor.setPower(0.8);
+        }
+        //  does not allow the claw to go below the max position
+        else if (gamepad1.dpad_down)
+        {
+            liftMotor.setPower(-0.8);
         }
         else
         {
-            // does not allow the claw to go above the max position
-            if (gamepad1.dpad_up) //&& liftMotorPos <= liftMotorMax)
-            {
-                liftMotor.setPower(1.0);
-            }
-            //  does not allow the claw to go below the max position
-            else if (gamepad1.dpad_down) // && liftMotorPos >= liftMotorMin)
-            {
-                liftMotor.setPower(-1.0);
-            }
-            else
-            {
-                liftMotor.setPower(0.0);
-            }
-            /*if (!gamepad1.dpad_up && !gamepad1.dpad_down)
-            {
-                // corrects position if claw goes below or above limit
-                if (liftMotorPos > liftMotorMax)
-                {
-                    liftMotor.setPower(-0.3);
-                }
-                else if (liftMotorPos < liftMotorMin)
-                {
-                    liftMotor.setPower(0.3);
-                }
-                else
-                {
-                    liftMotor.setPower(0.0);
-                }
-            }*/
+            liftMotor.setPower(0.0);
         }
 
         // Controls the extending pf the claw arm
@@ -234,6 +222,10 @@ public class FreightFrenzyTeleOP extends OpMode
             clawServo.setPower(-0.38);
         }
         else if (gamepad1.left_bumper)
+        {
+            clawServo.setPower(-0.15);
+        }
+        else if (gamepad1.share)
         {
             clawServo.setPower(-0.09);
         }
@@ -271,18 +263,22 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
 
-        if (gamepad1.share && !extending)
+        if (gamepad1.square && !extending)
         {
             extending = true;
-            extendPos += 0.06875;
+            extendPos += 0.04;
         }
-        else if (gamepad1.options && !extending)
+        else if (gamepad1.circle && !extending)
         {
             extending = true;
-            extendPos -= 0.06875;
+            extendPos -= 0.04;
+        }
+        else if (gamepad1.options)
+        {
+            extendServo.setPower(-0.6);
         }
 
-        if (!gamepad1.options && !gamepad1.share && extending) // reset extending flag
+        if (!gamepad1.circle && !gamepad1.square && extending) // reset extending flag
         {
             extending = false;
         }
@@ -299,6 +295,19 @@ public class FreightFrenzyTeleOP extends OpMode
 
         spinServo.setPower(spinPos);
         extendServo.setPower(extendPos);
+
+        if (gamepad1.cross || autoHome)
+        {
+            if (!autoHome)
+            {
+                startHomeFrame = currentFrame;
+            }
+
+            autoHome = true;
+            autoHoming();
+        }
+
+
         
         liftMotorPos = liftMotor.getCurrentPosition();
 
