@@ -294,13 +294,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 pan(RIGHT);
                             }
-                            if (finalTime < 6150 && finalTime > 3150)
+                            if (finalTime < 6650 && finalTime > 3150)
                             {
                                 pan(STOP);
                                 duck(ON);
                             }
-                            if (finalTime > 6150)
+                            if (finalTime > 6650)
                             {
+                                drive(STOP);
                                 duck(OFF);
                             }
                         }
