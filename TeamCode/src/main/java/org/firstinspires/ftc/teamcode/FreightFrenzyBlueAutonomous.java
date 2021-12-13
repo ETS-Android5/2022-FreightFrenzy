@@ -68,6 +68,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private DcMotor duckMotor = null;
 
+    private int drive1 = 500;
+    private int stop1 = drive1 + 100;
+    private int pan1 = stop1 + 1400;
+    private int duck1 = pan1 + 3700;
+
     public void drive (String fb)
     {
         if (fb.equals("forward"))
@@ -282,24 +287,24 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 initTime = System.currentTimeMillis();
                                 timeReset = true;
                             }
-                            if (finalTime < 500)
+                            if (finalTime < drive1)
                             {
                                 drive(FORWARD);
                             }
-                            if (finalTime < 600 && finalTime > 500)
+                            if (finalTime < stop1 && finalTime > drive1)
                             {
                                 drive(STOP);
                             }
-                            if (finalTime < 2500 && finalTime > 600)
+                            if (finalTime < pan1 && finalTime > stop1)
                             {
                                 pan(RIGHT);
                             }
-                            if (finalTime < 6200 && finalTime > 2500)
+                            if (finalTime < duck1 && finalTime > pan1)
                             {
                                 pan(STOP);
                                 duck(ON);
                             }
-                            if (finalTime > 6200)
+                            if (finalTime > duck1)
                             {
                                 drive(STOP);
                                 duck(OFF);
