@@ -70,8 +70,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int drive1 = 400;
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 3000;
-    private int duck1 = pan1 + 3700;
+    private int pan1 = stop1 + 2750;
+    private int duck1 = pan1 + 3200;
+    private int pan2 = duck1 + 500;
+    private int drive2 = pan2 + 500;
 
     public void drive (String fb)
     {
@@ -304,10 +306,18 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 pan(STOP);
                                 duck(ON);
                             }
-                            if (finalTime > duck1)
+                            if (finalTime < pan2 && finalTime > duck1)
+                            {
+                                duck(OFF);
+                                pan(LEFT);
+                            }
+                            if (finalTime < drive2 & finalTime > pan2)
+                            {
+                                drive(BACKWARD);
+                            }
+                            if (finalTime > drive2)
                             {
                                 drive(STOP);
-                                duck(OFF);
                             }
                         }
                     }
@@ -341,7 +351,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.minResultConfidence = 0.7f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
