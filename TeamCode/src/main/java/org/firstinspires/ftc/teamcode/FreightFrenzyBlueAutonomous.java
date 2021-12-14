@@ -70,7 +70,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int drive1 = 400;
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 3000;
+    private int pan1 = stop1 + 2750;
     private int duck1 = pan1 + 3200;
     private int pan2 = duck1 + 1250;
     private int drive2 = pan2 + 750;
