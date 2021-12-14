@@ -70,9 +70,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int drive1 = 400;
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 2950;
+    private int pan1 = stop1 + 1950;
     private int duck1 = pan1 + 3200;
-    private int pan2 = duck1 + 1250;
+    private int pan2 = duck1 + 800;
     private int drive2 = pan2 + 750;
 
     public void drive (String fb)
@@ -129,17 +129,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     {
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-0.3);
-            frontRightMotor.setPower(-0.3);
-            backLeftMotor.setPower(0.3);
-            backRightMotor.setPower(0.3);
+            frontLeftMotor.setPower(-0.45);
+            frontRightMotor.setPower(-0.45);
+            backLeftMotor.setPower(0.45);
+            backRightMotor.setPower(0.45);
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(0.3);
-            frontRightMotor.setPower(0.3);
-            backLeftMotor.setPower(-0.3);
-            backRightMotor.setPower(-0.3);
+            frontLeftMotor.setPower(0.45);
+            frontRightMotor.setPower(0.45);
+            backLeftMotor.setPower(-0.45);
+            backRightMotor.setPower(-0.45);
         }
         if (lr.equals("stop"))
         {
