@@ -71,9 +71,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive1 = 400;
     private int stop1 = drive1 + 100;
     private int pan1 = stop1 + 2650;
-    private int duck1 = pan1 + 3200;
+    private int drive2 = pan1 + 100;
+    private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 1250;
-    private int drive2 = pan2 + 750;
+    private int drive3 = pan2 + 750;
 
     public void drive (String fb)
     {
@@ -311,9 +312,13 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 pan(RIGHT);
                             }
-                            if (finalTime < duck1 && finalTime > pan1)
+                            if (finalTime < drive2 && finalTime > pan1)
                             {
-                                pan(STOP);
+                                drive(BACKWARD);
+                            }
+                            if (finalTime < duck1 && finalTime > drive2)
+                            {
+                                drive(STOP);
                                 duck(ON);
                             }
                             if (finalTime < pan2 && finalTime > duck1)
@@ -321,11 +326,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT);
                             }
-                            if (finalTime < drive2 & finalTime > pan2)
+                            if (finalTime < drive3 & finalTime > pan2)
                             {
                                 drive(BACKWARD);
                             }
-                            if (finalTime > drive2)
+                            if (finalTime > drive3)
                             {
                                 drive(STOP);
                             }
