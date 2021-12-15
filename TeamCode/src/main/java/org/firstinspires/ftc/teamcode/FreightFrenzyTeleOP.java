@@ -98,7 +98,7 @@ public class FreightFrenzyTeleOP extends OpMode
     private void autoHoming()
     {
         long retractTime = startHomeFrame + 100; // how long it takes to retract arm
-        long centerTime = retractTime + 100; // how long it takes to center and lower arm
+        long centerTime = retractTime + 50; // how long it takes to center and lower arm
 
 
         extendPos = -0.55;
