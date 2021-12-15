@@ -42,7 +42,7 @@ public class FreightFrenzyTeleOP extends OpMode
     double duckMax = 0.8;
     double duckPower = 0.0;
     double spinPos = -0.0777;
-    double extendPos = -0.56;
+    double extendPos = -0.6;
 
     boolean startLift = true;
 
@@ -68,7 +68,7 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        liftMotorZero = liftMotor.getCurrentPosition()+ 600;
+        liftMotorZero = liftMotor.getCurrentPosition()+ 300;
         
         clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
@@ -97,19 +97,12 @@ public class FreightFrenzyTeleOP extends OpMode
 
     private void autoHoming()
     {
-        long retractTime = startHomeFrame + 700; // how long it takes to retract arm
-        long centerTime = retractTime + 600; // how long it takes to center and lower arm
+        long retractTime = startHomeFrame + 100; // how long it takes to retract arm
+        long centerTime = retractTime + 100; // how long it takes to center and lower arm
 
 
-        if (extendPos != -0.55)
-        {
-            extendPos = -0.55;
-        }
-
-        if (spinPos != -0.0777)
-        {
-            spinPos = -0.0777;
-        }
+        extendPos = -0.55;
+        spinPos = -0.0777;
 
         if(liftMotorPos > liftMotorZero)
         {
@@ -154,7 +147,7 @@ public class FreightFrenzyTeleOP extends OpMode
         double turn = gamepad1.right_stick_x;
         double pan = gamepad1.left_stick_x;
 
-        double lift = gamepad2.left_stick_y;
+        double lift = -gamepad2.left_stick_y;
 
         // Driving controls
         frontLeftPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -242,23 +235,23 @@ public class FreightFrenzyTeleOP extends OpMode
         }
         else if (gamepad2.left_bumper)
         {
-            clawServo.setPower(-0.175);
+            clawServo.setPower(-0.18);
         }
         else if (gamepad2.start)
         {
-            clawServo.setPower(-0.0082);
+            clawServo.setPower(-0.075);
         }
 
         // Controls the spinning of the pick-and-place
         if (gamepad2.right_stick_x < 0 && !spinning)
         {
             spinning = true;
-            spinPos += 0.044;
+            spinPos += 0.033;
         }
         else if (gamepad2.right_stick_x > 0 && !spinning)
         {
             spinning = true;
-            spinPos -= 0.044;
+            spinPos -= 0.033;
         }
         else if (gamepad2.right_stick_button && !spinning) // center
         {
@@ -282,19 +275,19 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
 
-        if (gamepad2.right_stick_y > 0 && !extending)
+        if (-gamepad2.right_stick_y > 0 && !extending)
         {
             extending = true;
             extendPos += 0.04;
         }
-        else if (gamepad2.right_stick_y < 0 && !extending)
+        else if (-gamepad2.right_stick_y < 0 && !extending)
         {
             extending = true;
             extendPos -= 0.04;
         }
         else if (gamepad2.circle)  //home position for extend arm
         {
-            extendPos = -0.55;
+            extendPos = -0.6;
         }
 
         if (gamepad2.right_stick_y == 0 && extending) // reset extending flag
