@@ -294,16 +294,16 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         liftMotorPos = liftMotor.getCurrentPosition() - liftMotorZero;
 
                         telemetry.addData("Loop count:", loopCount);
-                        if (resetTime == 0)
+                        if (resetTime /* == 0 */ < 9)
                         {
                             telemetry.addData("Time is:", finalTime);
                             telemetry.addData("Ms/loop:", finalTime / loopCount);
                         }
-                        if (resetTime > 0)
+                        /* if (resetTime > 0)
                         {
                             telemetry.addData("Time is:", finalTime + timeDifference);
                             telemetry.addData("Ms/loop:", (finalTime + timeDifference) / loopCount);
-                        }
+                        } */
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
 
