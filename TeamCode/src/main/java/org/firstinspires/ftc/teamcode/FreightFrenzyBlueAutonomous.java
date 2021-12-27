@@ -431,7 +431,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if ((finalTime > turn1) & !autoHome)
                             {
                                 turn(STOP);
-                                resetTime = 2;
+                                resetTime = 3;
                                 timeReset = false;
                             }
                         }
