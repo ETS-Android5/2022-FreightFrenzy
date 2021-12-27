@@ -64,7 +64,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive4 = pan3 + 1000;
 
     // resetTime == 2
-    private int turn1 = 1000;
+    private int turn1 = 3000;
 
     // resetTime == 3
     private int drive5 = 3000;
@@ -427,6 +427,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < turn1)
                             {
                                 turn(LEFT);
+                                extendServo.setPower(-0.0777);
                             }
                             if ((finalTime > turn1) & !autoHome)
                             {
