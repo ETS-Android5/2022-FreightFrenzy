@@ -330,6 +330,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 if ((elementPosition == 2 & liftMotorPos <= 2300) | (elementPosition == 3 & liftMotorPos <= 5300))
                                 {
                                     lift(ON);
+                                    telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
                                 {
