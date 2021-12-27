@@ -175,9 +175,13 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private void autoHoming() // see TeleOp for notes
     {
-        if ((liftMotorPos > liftMotorZero) && elementPosition != 1)
+        if ((liftMotorPos > 1000) && elementPosition != 1)
         {
             liftMotor.setPower(-1.0);
+        }
+        else if ((liftMotorPos > liftMotorZero) && elementPosition != 1)
+        {
+            liftMotor.setPower(-0.3);
         }
         else
         {
@@ -296,8 +300,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("Loop count:", loopCount);
                         if (resetTime /* == 0 */ < 9)
                         {
-                            telemetry.addData("Time is:", finalTime);
-                            telemetry.addData("Ms/loop:", finalTime / loopCount);
+                            telemetry.addData("Time is: ", finalTime);
+                            telemetry.addData("Ms/loop: ", finalTime / loopCount);
+                            telemetry.addData("Reset time is: ", resetTime);
                         }
                         /* if (resetTime > 0)
                         {
@@ -419,7 +424,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 initTime = System.currentTimeMillis();
                                 timeReset = true;
                             }
-                            if (finalTime < rotate1 && finalTime > wait1)
+                            if (finalTime < rotate1 & finalTime > wait1)
                             {
                                 extendServo.setPower(-0.6);
                                 drive(BACKWARD, 0.15);
