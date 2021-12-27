@@ -37,6 +37,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private DcMotor frontRightMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+    private CRServo spinServo = null;
     private CRServo extendServo = null;
 
     private DcMotor duckMotor = null;
@@ -52,7 +53,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 1750;
     private int drive3 = pan2 + 750;
-    private int pan3 = drive3 + 2500;
+    private int pan3 = drive3 + 2750;
     private int drive4 = pan3 + 1000;
 
     public void drive (String fb, double speedMod)
@@ -196,6 +197,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         duckMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        spinServo = hardwareMap.crservo.get("spinServo");
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -270,6 +273,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
                         {
+                            spinServo.setPower(-0.0777);
                             if (elementCoordinate >= 0 && elementCoordinate < 640)
                             {
                                 elementPosition = 1;
@@ -327,7 +331,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < pan3 & finalTime > drive3)
                             {
                                 pan(LEFT);
-                                if ((elementPosition == 2 & liftMotorPos <= 2300) || (elementPosition == 3 & liftMotorPos <= 5300))
+                                spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
+                                if ((elementPosition == 2 & liftMotorPos <= 2300) || (elementPosition == 3 & liftMotorPos <= 6000))
                                 {
                                     lift(ON);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
