@@ -104,9 +104,9 @@ public class FreightFrenzyTeleOP extends OpMode
         extendPos = -0.55;
         spinPos = -0.0777;
 
-        if(liftMotorPos > liftMotorZero)
+        if(liftMotorPos > -4000)
         {
-            liftMotor.setPower(-1.0);
+            liftMotor.setPower(-0.5);
         }
         else
         {
