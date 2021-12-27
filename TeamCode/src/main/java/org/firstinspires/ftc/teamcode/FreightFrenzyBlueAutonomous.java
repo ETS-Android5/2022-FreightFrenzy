@@ -431,7 +431,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < rotate1 && finalTime > wait1)
                             {
                                 extendServo.setPower(-0.6);
-                                drive(BACKWARD, 0.3);
+                                drive(BACKWARD, 0.15);
                             }
                             if (finalTime < turn1 & finalTime > rotate1)
                             {
@@ -441,7 +441,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 turn(STOP);
                                 startHomeFrame = loopCount;
-                                // autoHoming();
+                                autoHoming();
                             }
                         }
                     }
