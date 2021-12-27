@@ -53,7 +53,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 1750;
     private int drive3 = pan2 + 750;
-    private int pan3 = drive3 + 3250;
+    private int pan3 = drive3 + 3350;
     private int drive4 = pan3 + 1000;
 
     public void drive (String fb, double speedMod)
@@ -198,6 +198,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         spinServo = hardwareMap.crservo.get("spinServo");
+        extendServo = hardwareMap.crservo.get("extendServo");
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -353,6 +354,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF);
                                 }
+                                extendServo.setPower(-0.4);
                             }
                             if (finalTime > drive4) {
                                 drive(STOP, 0.0);
