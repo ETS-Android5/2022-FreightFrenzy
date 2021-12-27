@@ -53,7 +53,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 1750;
     private int drive3 = pan2 + 750;
-    private int pan3 = drive3 + 2750;
+    private int pan3 = drive3 + 3250;
     private int drive4 = pan3 + 1000;
 
     public void drive (String fb, double speedMod)
