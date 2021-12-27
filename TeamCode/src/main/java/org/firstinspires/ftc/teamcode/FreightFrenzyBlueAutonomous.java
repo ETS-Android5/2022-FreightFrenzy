@@ -37,6 +37,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private DcMotor frontRightMotor = null;
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
+    private CRServo clawServo = null;
     private CRServo spinServo = null;
     private CRServo extendServo = null;
 
@@ -197,6 +198,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         duckMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
 
@@ -356,8 +358,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 }
                                 extendServo.setPower(-0.4);
                             }
-                            if (finalTime > drive4) {
+                            if (finalTime > drive4)
+                            {
                                 drive(STOP, 0.0);
+                                clawServo.setPower(-0.38);
                             }
                         }
                     }
