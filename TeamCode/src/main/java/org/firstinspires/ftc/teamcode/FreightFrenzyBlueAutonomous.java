@@ -340,6 +340,15 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive4 & finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
+                                if (elementPosition == 3 & liftMotorPos <= 5300)
+                                {
+                                    lift(ON);
+                                    telemetry.addData("Lift Motor Position: ", liftMotorPos);
+                                }
+                                else
+                                {
+                                    lift(OFF);
+                                }
                             }
                             if (finalTime > drive4) {
                                 drive(STOP, 0.0);
