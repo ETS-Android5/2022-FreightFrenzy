@@ -47,7 +47,12 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int liftMotorPos;
     private int liftMotorZero;
+    
+    // variables for auto homing
+    private long startHomeFrame;
+    private boolean autoHome = false;
 
+    // resetTime == 1
     private int drive1 = 500; // modify this based on optimal battery speed
     private int stop1 = drive1 + 100;
     private int pan1 = stop1 + 2600;
@@ -57,6 +62,12 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive3 = pan2 + 750;
     private int pan3 = drive3 + 3350;
     private int drive4 = pan3 + 1000;
+
+    // resetTime == 2
+    private int turn1 = 1000;
+
+    // resetTime == 3
+    private int drive5 = 3000;
 
     public void drive (String fb, double speedMod)
     {
@@ -87,17 +98,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     {
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-0.15);
-            frontRightMotor.setPower(0.15);
-            backLeftMotor.setPower(-0.15);
-            backRightMotor.setPower(0.15);
+            frontLeftMotor.setPower(-0.3);
+            frontRightMotor.setPower(0.3);
+            backLeftMotor.setPower(-0.3);
+            backRightMotor.setPower(0.3);
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(0.15);
-            frontRightMotor.setPower(-0.15);
-            backLeftMotor.setPower(0.15);
-            backRightMotor.setPower(-0.15);
+            frontLeftMotor.setPower(0.3);
+            frontRightMotor.setPower(-0.3);
+            backLeftMotor.setPower(0.3);
+            backRightMotor.setPower(-0.3);
         }
         if (lr.equals("stop"))
         {
@@ -157,6 +168,34 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         }
         else
             liftMotor.setPower(0.0);
+    }
+
+    private void autoHoming() // see TeleOp for notes
+    {
+        long retractTime = startHomeFrame + 100;
+        long centerTime = retractTime + 50;
+
+        if (liftMotorPos > liftMotorZero)
+        {
+            liftMotor.setPower(-1.0);
+        }
+        else
+        {
+            liftMotor.setPower(0.0);
+        }
+
+        if (loopCount > startHomeFrame & loopCount <= retractTime)
+        {
+            extendServo.setPower(-0.6);
+        }
+        if (loopCount > retractTime && loopCount <= centerTime)
+        {
+            spinServo.setPower(-0.0777);
+        }
+        if (loopCount > centerTime)
+        {
+            autoHome = true;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,11 +414,36 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (completedLower)
                             {
                                 clawServo.setPower(-0.38);
+                                resetTime = 2;
+                            }
+                        }
+                        if (resetTime == 2)
+                        {
+                            if (!timeReset) {
+                                timeDifference = finalTime;
+                                initTime = System.currentTimeMillis();
+                                timeReset = true;
+                            }
+                            if (finalTime < turn1)
+                            {
+                                turn(LEFT);
+                            }
+                            if ((finalTime > turn1) & !autoHome)
+                            {
+                                turn(STOP);
+                                startHomeFrame = loopCount;
+                                autoHoming();
                             }
                         }
                     }
                 }
             }
+            frontLeftMotor.setPower(0.0);
+            frontRightMotor.setPower(0.0);
+            backLeftMotor.setPower(0.0);
+            backRightMotor.setPower(0.0);
+            duckMotor.setPower(0.0);
+            liftMotor.setPower(0.0);
         }
     }
 
