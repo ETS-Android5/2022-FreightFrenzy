@@ -44,7 +44,6 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int liftMotorPos;
     private int liftMotorZero;
-    private int liftMotorMax;
 
     private int drive1 = 500; // modify this based on optimal battery speed
     private int stop1 = drive1 + 100;

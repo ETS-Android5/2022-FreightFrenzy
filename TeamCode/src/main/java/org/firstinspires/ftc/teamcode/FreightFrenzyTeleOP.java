@@ -170,7 +170,7 @@ public class FreightFrenzyTeleOP extends OpMode
         backRightMotor.setPower(powerScale * backRightPan);
 
 
-        if (startLift && liftMotor.getCurrentPosition() < liftMotorZero) // set lift to starting position
+        if (startLift) // set lift to starting position
         {
             liftPower = 1.0;
         }
