@@ -301,16 +301,16 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         liftMotorPos = liftMotor.getCurrentPosition() - liftMotorZero;
 
                         telemetry.addData("Loop count:", loopCount);
-                        if (resetTime /* == 0 */ < 9)
+                        if (resetTime == 0)
                         {
                             telemetry.addData("Time is:", finalTime);
                             telemetry.addData("Ms/loop:", finalTime / loopCount);
                         }
-                        /* if (resetTime > 0)
+                        if (resetTime > 0)
                         {
                             telemetry.addData("Time is:", finalTime + timeDifference);
                             telemetry.addData("Ms/loop:", (finalTime + timeDifference) / loopCount);
-                        } */
+                        }
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
 
@@ -416,6 +416,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 clawServo.setPower(-0.38);
                                 resetTime = 2;
+                                timeReset = false;
                             }
                         }
                         if (resetTime == 2)
@@ -434,7 +435,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 turn(STOP);
                                 startHomeFrame = loopCount;
-                                // autoHoming();
+                                autoHoming();
                             }
                         }
                     }
