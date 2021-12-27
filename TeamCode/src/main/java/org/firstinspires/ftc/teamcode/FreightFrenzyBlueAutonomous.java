@@ -27,6 +27,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private double duckPower = 0.0;
 
     private long loopCount = 0;
+    private long timeDifference = 0;
     private boolean elementFound = false;
     private float elementCoordinate = -1;
     private int elementPosition = 0;
@@ -270,6 +271,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
         if (opModeIsActive()) {
             long initTime = System.currentTimeMillis();
+            long finalTime;
             liftMotorZero = liftMotor.getCurrentPosition();
             while (opModeIsActive()) {
                 if (tfod != null) {
@@ -294,8 +296,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         }
                         telemetry.update();
 
-                        long finalTime = System.currentTimeMillis() - initTime;
-                        long timeDifference = 0;
+                        finalTime = System.currentTimeMillis() - initTime;
                         loopCount += 1;
                         liftMotorPos = liftMotor.getCurrentPosition() - liftMotorZero;
 
@@ -433,7 +434,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 turn(STOP);
                                 startHomeFrame = loopCount;
-                                autoHoming();
+                                // autoHoming();
                             }
                         }
                     }
