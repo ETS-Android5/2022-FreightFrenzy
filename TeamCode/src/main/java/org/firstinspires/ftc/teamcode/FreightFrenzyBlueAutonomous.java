@@ -32,6 +32,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int elementPosition = 0;
     private int resetTime = 0;
     private boolean timeReset = false;
+    private boolean completedLower = false;
 
     private DcMotor frontLeftMotor = null;
     private DcMotor frontRightMotor = null;
@@ -148,11 +149,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         duckMotor.setPower(duckPower);
     }
 
-    public void lift (Boolean uber)
+    public void lift (Boolean uber, double speedMod)
     {
         if (uber)
         {
-            liftMotor.setPower(1.0);
+            liftMotor.setPower(speedMod);
         }
         else
             liftMotor.setPower(0.0);
@@ -336,12 +337,12 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
                                 if ((elementPosition == 2 & liftMotorPos <= 2300) || (elementPosition == 3 & liftMotorPos <= 6000))
                                 {
-                                    lift(ON);
+                                    lift(ON, 1.0);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
                                 {
-                                    lift(OFF);
+                                    lift(OFF, 0.0);
                                 }
                             }
                             if (finalTime < drive4 & finalTime > pan3)
@@ -349,18 +350,29 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 drive(FORWARD, 0.3);
                                 if (elementPosition == 3 & liftMotorPos <= 5300)
                                 {
-                                    lift(ON);
+                                    lift(ON, 1.0);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
                                 {
-                                    lift(OFF);
+                                    lift(OFF, 0.0);
                                 }
                                 extendServo.setPower(-0.4);
                             }
                             if (finalTime > drive4)
                             {
+                                if (elementPosition == 1 & liftMotorPos >= -50)
+                                {
+                                    lift(ON, -0.3);
+                                }
+                                else
+                                {
+                                    lift(OFF, 0.0);
+                                }
                                 drive(STOP, 0.0);
+                            }
+                            if (completedLower)
+                            {
                                 clawServo.setPower(-0.38);
                             }
                         }
