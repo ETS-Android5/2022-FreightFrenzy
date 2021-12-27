@@ -361,13 +361,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime > drive4)
                             {
-                                if (elementPosition == 1 & liftMotorPos >= -50)
+                                if (elementPosition == 1 & liftMotorPos >= -100)
                                 {
                                     lift(ON, -0.3);
                                 }
                                 else
                                 {
                                     lift(OFF, 0.0);
+                                    completedLower = true;
                                 }
                                 drive(STOP, 0.0);
                             }
