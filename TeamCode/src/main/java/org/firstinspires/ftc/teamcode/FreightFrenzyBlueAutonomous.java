@@ -273,7 +273,6 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
                         {
-                            spinServo.setPower(-0.0777);
                             if (elementCoordinate >= 0 && elementCoordinate < 640)
                             {
                                 elementPosition = 1;
