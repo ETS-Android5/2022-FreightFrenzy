@@ -65,7 +65,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive4 = pan3 + 1000;
 
     // resetTime == 2
-    private int wait1 = 1000;
+    private int wait1 = 2000;
     private int rotate1 = wait1 + 1000;
     private int turn1 = rotate1 + 1000;
 
@@ -423,6 +423,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
                                 timeReset = true;
+                            }
+                            if (finalTime < wait1)
+                            {
+                                clawServo.setPower(-0.38);
                             }
                             if (finalTime < rotate1 & finalTime > wait1)
                             {
