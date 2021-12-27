@@ -65,9 +65,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive4 = pan3 + 1000;
 
     // resetTime == 2
-    private int wait1 = 2000;
-    private int rotate1 = wait1 + 1000;
-    private int turn1 = rotate1 + 1000;
+    private int wait1 = 1000;
+    private int rotate1 = wait1 + 1500;
+    private int turn1 = rotate1 + 1250;
 
     // resetTime == 3
     private int drive5 = 3000;
@@ -175,7 +175,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private void autoHoming() // see TeleOp for notes
     {
-        if ((liftMotorPos > 1000) && elementPosition != 1)
+        if ((liftMotorPos > liftMotorZero + 1000) && elementPosition != 1)
         {
             liftMotor.setPower(-1.0);
         }
@@ -188,6 +188,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
             liftMotor.setPower(0.0);
         }
 
+        extendServo.setPower(-0.6);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
         if (spinServo.getPower() == -0.0777);
@@ -422,6 +423,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (!timeReset) {
                                 timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
+                                finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
                             }
                             if (finalTime < wait1)
@@ -431,7 +433,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < rotate1 & finalTime > wait1)
                             {
                                 extendServo.setPower(-0.6);
-                                drive(BACKWARD, 0.15);
+                                drive(BACKWARD, 0.1);
                             }
                             if (finalTime < turn1 & finalTime > rotate1)
                             {
@@ -449,6 +451,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (!timeReset) {
                                 timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
+                                finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
                                 startHomeFrame = loopCount;
                             }
