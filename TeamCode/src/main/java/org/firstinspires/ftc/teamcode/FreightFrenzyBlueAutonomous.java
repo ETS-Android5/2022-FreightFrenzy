@@ -65,7 +65,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive4 = pan3 + 1000;
 
     // resetTime == 2
-    private int wait1 = 500;
+    private int wait1 = 1000;
     private int turn1 = wait1 + 1500;
 
     // resetTime == 3
@@ -436,7 +436,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 turn(STOP);
                                 startHomeFrame = loopCount;
-                                autoHoming();
+                                // autoHoming();
                             }
                         }
                     }
