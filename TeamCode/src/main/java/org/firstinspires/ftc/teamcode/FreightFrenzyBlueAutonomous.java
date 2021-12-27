@@ -431,7 +431,20 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if ((finalTime > turn1) & !autoHome)
                             {
                                 turn(STOP);
+                                resetTime = 2;
+                                timeReset = false;
+                            }
+                        }
+                        if (resetTime == 3)
+                        {
+                            if (!timeReset) {
+                                timeDifference = finalTime;
+                                initTime = System.currentTimeMillis();
+                                timeReset = true;
                                 startHomeFrame = loopCount;
+                            }
+                            if (!autoHome)
+                            {
                                 autoHoming();
                             }
                         }
