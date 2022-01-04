@@ -338,7 +338,6 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
-                                finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
                             }
                             if (finalTime < drive1)
@@ -433,7 +432,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < rotate1 & finalTime > wait1)
                             {
-                                if (elementPosition == 1 & liftMotorPos <= 0)
+                                if (elementPosition == 1 & liftMotorPos <= 50)
                                 {
                                     lift(ON, 0.3);
                                 }
@@ -446,7 +445,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < turn1 & finalTime > rotate1)
                             {
-                                lift(OFF, 0.0);
+                                if (elementPosition == 1 & liftMotorPos <= 50)
+                                {
+                                    lift(ON, 0.3);
+                                }
+                                else
+                                {
+                                    lift(OFF, 0.0);
+                                }
                                 turn(LEFT);
                             }
                             if ((finalTime > turn1) & !autoHome)
