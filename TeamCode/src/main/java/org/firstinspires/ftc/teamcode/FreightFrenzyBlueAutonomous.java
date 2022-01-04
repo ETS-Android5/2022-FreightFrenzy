@@ -432,7 +432,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < rotate1 & finalTime > wait1)
                             {
-                                if (elementPosition == 1 & liftMotorPos <= 50)
+                                if (elementPosition == 1 & liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.3);
                                 }
@@ -445,7 +445,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < turn1 & finalTime > rotate1)
                             {
-                                if (elementPosition == 1 & liftMotorPos <= 50)
+                                if (elementPosition == 1 & liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.3);
                                 }
