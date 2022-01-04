@@ -175,11 +175,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private void autoHoming() // see TeleOp for notes
     {
-        if ((liftMotorPos > liftMotorZero + 1000) && elementPosition != 1)
+        if ((liftMotorPos >= liftMotorZero + 1200) && elementPosition != 1)
         {
             liftMotor.setPower(-1.0);
         }
-        else if ((liftMotorPos > liftMotorZero) && elementPosition != 1)
+        else if ((liftMotorPos >= liftMotorZero + 200) && elementPosition != 1)
         {
             liftMotor.setPower(-0.3);
         }
@@ -188,7 +188,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
             liftMotor.setPower(0.0);
         }
 
-        extendServo.setPower(-0.6);
+        extendServo.setPower(-0.55);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
         if (spinServo.getPower() == -0.0777);
@@ -440,7 +440,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                extendServo.setPower(-0.6);
+                                extendServo.setPower(-0.55);
                                 drive(BACKWARD, 0.1);
                             }
                             if (finalTime < turn1 & finalTime > rotate1)
