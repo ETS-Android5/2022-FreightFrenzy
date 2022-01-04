@@ -68,8 +68,8 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        liftMotorZero = liftMotor.getCurrentPosition()+ 300;
-        
+        liftMotorZero = liftMotor.getCurrentPosition()+ 200;
+
         clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
@@ -98,10 +98,10 @@ public class FreightFrenzyTeleOP extends OpMode
     private void autoHoming()
     {
         long retractTime = startHomeFrame + 100; // how long it takes to retract arm
-        long centerTime = retractTime + 50; // how long it takes to center and lower arm
+        long centerTime = retractTime + 200; // how long it takes to center and lower arm
 
 
-        extendPos = -0.55;
+        extendPos = -0.65;
         spinPos = -0.0777;
 
         if(liftMotorPos > liftMotorZero)
@@ -197,12 +197,19 @@ public class FreightFrenzyTeleOP extends OpMode
         }
 
         // Duck carousel spinner
-        if (gamepad1.touchpad)
+        if (gamepad1.touchpad || gamepad1.y)
         {
-            telemetry.addData("duckPower: ", "" + duckPower);
             if (duckPower < duckMax)
             {
                 duckPower += 0.005;
+            }
+            duckMotor.setPower(duckPower);
+        }
+        else if (gamepad1.x)
+        {
+            if (duckPower > -duckMax)
+            {
+                duckPower -= 0.005;
             }
             duckMotor.setPower(duckPower);
         }
@@ -235,7 +242,7 @@ public class FreightFrenzyTeleOP extends OpMode
         }
         else if (gamepad2.left_bumper)
         {
-            clawServo.setPower(-0.18);
+            clawServo.setPower(-0.17);
         }
         else if (gamepad2.start)
         {
@@ -319,6 +326,10 @@ public class FreightFrenzyTeleOP extends OpMode
             autoHoming();
         }
 
+        if (gamepad2.triangle)
+        {
+            liftMotorZero = liftMotor.getCurrentPosition();
+        }
 
         
         liftMotorPos = liftMotor.getCurrentPosition();
