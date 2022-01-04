@@ -175,11 +175,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private void autoHoming() // see TeleOp for notes
     {
-        if ((liftMotorPos >= liftMotorZero + 1200) && elementPosition != 1)
+        if ((liftMotorPos >= 1200) && elementPosition != 1)
         {
             liftMotor.setPower(-1.0);
         }
-        else if ((liftMotorPos >= liftMotorZero + 200) && elementPosition != 1)
+        else if ((liftMotorPos >= 200) && elementPosition != 1)
         {
             liftMotor.setPower(-0.3);
         }
