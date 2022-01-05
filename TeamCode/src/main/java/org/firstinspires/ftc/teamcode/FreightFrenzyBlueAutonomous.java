@@ -180,15 +180,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         {
             liftMotor.setPower(-1.0);
         }
-        else if ((liftMotorPos >= 200) && elementPosition != 1)
+        /* else if ((liftMotorPos >= 200) && elementPosition != 1)
         {
             liftMotor.setPower(-0.3);
-        }
+        } */
         else
         {
             liftMotor.setPower(0.0);
             doneLowering = true;
         }
+
+        telemetry.addData("Done lowering: ", doneLowering);
 
         extendServo.setPower(-0.55);
         spinServo.setPower(-0.0777);
