@@ -180,10 +180,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         {
             liftMotor.setPower(-1.0);
         }
-        /* else if ((liftMotorPos >= 200) && elementPosition != 1)
+        else if ((liftMotorPos >= 200) && elementPosition != 1)
         {
             liftMotor.setPower(-0.3);
-        } */
+        }
         else
         {
             liftMotor.setPower(0.0);
@@ -195,7 +195,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         extendServo.setPower(-0.55);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
-        if (spinServo.getPower() == -0.0777 & doneLowering);
+        if (spinServo.getPower() == -0.0777 && doneLowering)
         {
             autoHome = true;
         }
@@ -370,15 +370,15 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT);
                             }
-                            if (finalTime < drive3 & finalTime > pan2)
+                            if (finalTime < drive3 && finalTime > pan2)
                             {
                                 drive(BACKWARD, 0.3);
                             }
-                            if (finalTime < pan3 & finalTime > drive3)
+                            if (finalTime < pan3 && finalTime > drive3)
                             {
                                 pan(LEFT);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
-                                if ((elementPosition == 2 & liftMotorPos <= 2300) || (elementPosition == 3 & liftMotorPos <= 6000))
+                                if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
                                     lift(ON, 1.0);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
@@ -388,10 +388,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                             }
-                            if (finalTime < drive4 & finalTime > pan3)
+                            if (finalTime < drive4 && finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
-                                if (elementPosition == 3 & liftMotorPos <= 5300)
+                                if (elementPosition == 3 && liftMotorPos <= 5300)
                                 {
                                     lift(ON, 1.0);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
@@ -404,7 +404,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime > drive4)
                             {
-                                if (elementPosition == 1 & liftMotorPos >= -125)
+                                if (elementPosition == 1 && liftMotorPos >= -125)
                                 {
                                     lift(ON, -0.3);
                                 }
@@ -434,9 +434,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 clawServo.setPower(-0.38);
                             }
-                            if (finalTime < rotate1 & finalTime > wait1)
+                            if (finalTime < rotate1 && finalTime > wait1)
                             {
-                                if (elementPosition == 1 & liftMotorPos <= 200)
+                                if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.3);
                                 }
@@ -447,9 +447,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 extendServo.setPower(-0.55);
                                 drive(BACKWARD, 0.1);
                             }
-                            if (finalTime < turn1 & finalTime > rotate1)
+                            if (finalTime < turn1 && finalTime > rotate1)
                             {
-                                if (elementPosition == 1 & liftMotorPos <= 200)
+                                if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.3);
                                 }
@@ -459,7 +459,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 }
                                 turn(LEFT);
                             }
-                            if ((finalTime > turn1) & !autoHome)
+                            if ((finalTime > turn1) && !autoHome)
                             {
                                 turn(STOP);
                                 resetTime = 3;
