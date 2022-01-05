@@ -70,7 +70,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int turn1 = rotate1 + 1250;
 
     // resetTime == 3
-    private int drive5 = 3000;
+    private int pan4 = 750;
+    private int drive5 = pan4 + 3000;
 
     public void drive (String fb, double speedMod)
     {
@@ -192,7 +193,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
         telemetry.addData("Done lowering: ", doneLowering);
 
-        extendServo.setPower(-0.55);
+        extendServo.setPower(-0.48);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
         if (spinServo.getPower() == -0.0777 && doneLowering)
@@ -444,7 +445,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                extendServo.setPower(-0.55);
+                                extendServo.setPower(-0.48);
                                 drive(BACKWARD, 0.1);
                             }
                             if (finalTime < turn1 && finalTime > rotate1)
@@ -468,16 +469,29 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         }
                         if (resetTime == 3)
                         {
-                            if (!timeReset) {
+                            if (!autoHome)
+                            {
+                                autoHoming();
+                            }
+                            if (!timeReset && autoHome) {
                                 timeDifference = finalTime;
                                 initTime = System.currentTimeMillis();
                                 finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
                                 startHomeFrame = loopCount;
                             }
-                            if (!autoHome)
+                            if (timeReset && finalTime < pan4)
                             {
-                                autoHoming();
+                                pan(RIGHT);
+                            }
+                            if (timeReset && finalTime < drive5 && finalTime > pan4)
+                            {
+                                drive(FORWARD, 1.0);
+                            }
+                            if (timeReset && finalTime > drive5)
+                            {
+                                drive(STOP, 0.0);
+                                telemetry.addData("We did it Reddit!", "");
                             }
                         }
                     }
