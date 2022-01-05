@@ -61,7 +61,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 1750;
     private int drive3 = pan2 + 750;
-    private int pan3 = drive3 + 3350;
+    private int pan3 = drive3 + 2850;
     private int drive4 = pan3 + 1000;
 
     // resetTime == 2
@@ -196,7 +196,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         extendServo.setPower(-0.48);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
-        if (spinServo.getPower() == -0.0777 && doneLowering)
+        if (spinServo.getPower() < -0.078 && doneLowering)
         {
             autoHome = true;
         }
