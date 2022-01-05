@@ -196,7 +196,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         extendServo.setPower(-0.48);
         spinServo.setPower(-0.0777);
         telemetry.addData("Servo position: ", spinServo.getPower());
-        if (spinServo.getPower() > -0.076 && doneLowering)
+        if (spinServo.getPower() > -0.08 && doneLowering)
         {
             autoHome = true;
         }
@@ -317,6 +317,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         } */
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
+                        telemetry.addData("Auto home: ", autoHome);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
