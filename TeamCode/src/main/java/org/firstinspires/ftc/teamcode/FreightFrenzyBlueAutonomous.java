@@ -71,7 +71,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     // resetTime == 3
     private int pan4 = 750;
-    private int drive5 = pan4 + 3000;
+    private int drive5 = pan4 + 1500;
 
     public void drive (String fb, double speedMod)
     {
@@ -487,7 +487,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (timeReset && finalTime < drive5 && finalTime > pan4)
                             {
-                                drive(FORWARD, 1.0);
+                                drive(FORWARD, 0.8);
                             }
                             if (timeReset && finalTime > drive5)
                             {
