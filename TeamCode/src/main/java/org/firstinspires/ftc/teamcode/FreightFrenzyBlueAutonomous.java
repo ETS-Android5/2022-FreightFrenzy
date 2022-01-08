@@ -194,9 +194,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         telemetry.addData("Done lowering: ", doneLowering);
 
         extendServo.setPower(-0.48);
-        spinServo.setPower(-0.0777);
+        spinServo.setPower(0.0623);
         telemetry.addData("Servo position: ", spinServo.getPower());
-        if (spinServo.getPower() > -0.08 && doneLowering)
+        if (spinServo.getPower() > 0.062 && doneLowering)
         {
             autoHome = true;
         }
