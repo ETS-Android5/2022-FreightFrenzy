@@ -57,7 +57,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int drive1 = 500; // modify this based on optimal battery speed
     private int stop1 = drive1 + 100;
     private int pan1 = stop1 + 2600;
-    private int drive2 = pan1 + 200;
+    private int drive2 = pan1 + 300;
     private int duck1 = drive2 + 3200;
     private int pan2 = duck1 + 2250;
     private int drive3 = pan2 + 750;
@@ -375,11 +375,20 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive3 && finalTime > pan2)
                             {
                                 drive(BACKWARD, 0.3);
+                                spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
+                                if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
+                                {
+                                    lift(ON, 1.0);
+                                    telemetry.addData("Lift Motor Position: ", liftMotorPos);
+                                }
+                                else
+                                {
+                                    lift(OFF, 0.0);
+                                }
                             }
                             if (finalTime < pan3 && finalTime > drive3)
                             {
                                 pan(LEFT);
-                                spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
                                     lift(ON, 1.0);
