@@ -50,7 +50,7 @@ public class FreightFrenzyTeleOP extends OpMode
 
     private boolean autoHome = false;
 
-    //frames
+    // Frames
     private long currentFrame;
     private long startHomeFrame;
 
@@ -96,13 +96,14 @@ public class FreightFrenzyTeleOP extends OpMode
 
     private void autoHoming()
     {
-        long retractTime = startHomeFrame + 100; // how long it takes to retract arm
-        long centerTime = retractTime + 200; // how long it takes to center and lower arm
+        long retractTime = startHomeFrame + 100; // How long it takes to retract arm
+        long centerTime = retractTime + 200; // How long it takes to center and lower arm
 
 
         extendPos = -0.48;
         spinPos = -0.0777;
 
+        // Lowers the lift motor until, it reaches the zero position
         if (liftMotorPos > liftMotorZero)
         {
             liftMotor.setPower(-1.0);
@@ -133,10 +134,10 @@ public class FreightFrenzyTeleOP extends OpMode
     @Override
     public void loop()
     {
-        //frame incrementer
+        // Frame incrementer
         currentFrame += 1;
 
-        //sets position of lift motor to the current position every loop
+        // Sets position of lift motor to the current position every loop
         liftMotorPos = liftMotor.getCurrentPosition();
 
         double drive = gamepad1.left_stick_y;
@@ -191,12 +192,12 @@ public class FreightFrenzyTeleOP extends OpMode
             powerScale = 0.2;
         }
 
-        // set lift to zero position at start of TeleOP
+        // Set lift to zero position at start of TeleOP
         if (startLift && liftMotor.getCurrentPosition() < liftMotorZero)
         {
             liftPower = 1.0;
         }
-        else // normal function, rest of TeleOP
+        else // Normal function, rest of TeleOP
         {
             startLift = false;
             liftPower = Range.clip(lift, -1.0, 1.0);
@@ -214,11 +215,11 @@ public class FreightFrenzyTeleOP extends OpMode
         {
             intakeMotor.setPower(0.9);
         }
-        else if(gamepad1.left_trigger > 0) // reverse for intake motor
+        else if(gamepad1.left_trigger > 0) // Reverse for intake motor
         {
             intakeMotor.setPower(-0.7);
         }
-        else // runs the motor for the entirety of code
+        else // Runs the motor for the entirety of code
         {
             intakeMotor.setPower(0.7);
         }
@@ -271,13 +272,13 @@ public class FreightFrenzyTeleOP extends OpMode
             spinning = true;
             spinPos -= 0.02;
         }
-        else if (gamepad2.right_stick_button && !spinning) // center
+        else if (gamepad2.right_stick_button && !spinning) // Center
         {
             spinning = true;
             spinPos = -0.0777;
         }
 
-        if (gamepad2.right_stick_x == 0 && spinning) // reset spinning flag
+        if (gamepad2.right_stick_x == 0 && spinning) // Reset spinning flag
         {
             spinning = false;
         }
@@ -306,12 +307,12 @@ public class FreightFrenzyTeleOP extends OpMode
             extending = true;
             extendPos -= 0.04;
         }
-        else if (gamepad2.circle)  //home position for extend arm
+        else if (gamepad2.circle)  //Home position for extend arm
         {
             extendPos = -0.6;
         }
 
-        if (gamepad2.right_stick_y == 0 && extending) // reset extending flag
+        if (gamepad2.right_stick_y == 0 && extending) // Reset extending flag
         {
             extending = false;
         }
@@ -326,7 +327,7 @@ public class FreightFrenzyTeleOP extends OpMode
             extendPos = -0.56;
         }
 
-        // sets the position of the extend servo
+        // Sets the position of the extend servo
         extendServo.setPower(extendPos);
 
         // Calls the autoHome function to set the pick-and-place arm to the "home" position
@@ -341,7 +342,7 @@ public class FreightFrenzyTeleOP extends OpMode
             autoHoming();
         }
 
-        //TELEMETRY, gives drivers valuable information
+        // TELEMETRY, gives drivers valuable information
         telemetry.addData("Power Scale: ", powerScale);
         telemetry.addData("Extend Position: ", extendPos);
         telemetry.addData("Spin Position: ", spinPos);
