@@ -501,6 +501,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (timeReset && finalTime > drive5)
                             {
                                 drive(STOP, 0.0);
+                                spinServo.setPower(-0.0777);
                                 telemetry.addData("We did it Reddit!", "");
                             }
                         }

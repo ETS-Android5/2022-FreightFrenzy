@@ -359,11 +359,11 @@ public class FreightFrenzyRedAutonomous extends LinearOpMode {
                             }
                             if (finalTime < turnRed1 && finalTime > stop1)
                             {
-                                turn(LEFT);
+                                turn(RIGHT);
                             }
                             if (finalTime < drive2 && finalTime > turnRed1)
                             {
-                                drive(FORWARD, 0.3);
+                                drive(BACKWARD, 0.3);
                             }
                             if (finalTime < duck1 && finalTime > drive2)
                             {
@@ -373,11 +373,11 @@ public class FreightFrenzyRedAutonomous extends LinearOpMode {
                             if (finalTime < driveRed1 && finalTime > duck1)
                             {
                                 duck(OFF);
-                                drive(BACKWARD, 0.3);
+                                drive(FORWARD, 0.3);
                             }
                             if (finalTime < turnRed2 && finalTime > driveRed1)
                             {
-                                turn(RIGHT);
+                                turn(LEFT);
                             }
                             if (finalTime < drive3 && finalTime > turnRed2)
                             {
@@ -508,6 +508,7 @@ public class FreightFrenzyRedAutonomous extends LinearOpMode {
                             if (timeReset && finalTime > drive5)
                             {
                                 drive(STOP, 0.0);
+                                spinServo.setPower(-0.0777);
                                 telemetry.addData("We did it Reddit!", "");
                             }
                         }
