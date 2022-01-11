@@ -72,6 +72,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     // resetTime == 3
     private int pan4 = 750;
     private int drive5 = pan4 + 1500;
+    private int turn2 = drive5 + 2500;
 
     public void drive (String fb, double speedMod)
     {
@@ -498,11 +499,15 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 drive(FORWARD, 0.8);
                             }
-                            if (timeReset && finalTime > drive5)
+                            if (timeReset && finalTime < turn2 && finalTime > drive5)
                             {
-                                drive(STOP, 0.0);
+                                turn(LEFT);
                                 spinServo.setPower(-0.0777);
                                 telemetry.addData("We did it Reddit!", "");
+                            }
+                            if (timeReset && finalTime > turn2)
+                            {
+                                drive(STOP, 0.0);
                             }
                         }
                     }
