@@ -468,11 +468,11 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                turn(RIGHT);
+                                drive(BACKWARD, 0.3);
                             }
                             if ((finalTime > turn1) && !autoHome)
                             {
-                                turn(STOP);
+                                drive(STOP, 0.0);
                                 resetTime = 3;
                                 timeReset = false;
                             }
@@ -492,17 +492,11 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                             }
                             if (timeReset && finalTime < pan4)
                             {
-                                pan(LEFT);
+                                pan(RIGHT);
                             }
-                            if (timeReset && finalTime < drive5 && finalTime > pan4)
-                            {
-                                drive(FORWARD, 0.3);
-                            }
-                            if (timeReset && finalTime > drive5)
+                            if (timeReset && finalTime > pan4)
                             {
                                 drive(STOP, 0.0);
-                                spinServo.setPower(-0.0777);
-                                telemetry.addData("We did it Reddit!", "");
                             }
                         }
                     }
