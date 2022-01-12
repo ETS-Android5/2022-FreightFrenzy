@@ -67,10 +67,10 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
     // resetTime == 2
     private int wait1 = 1000;
     private int rotate1 = wait1 + 1500;
-    private int turn1 = rotate1 + 1250;
+    private int turn1 = rotate1 + 500;
 
     // resetTime == 3
-    private int pan4 = 1500;
+    private int pan4 = 2000;
     private int drive5 = pan4 + 1500;
 
     public void drive (String fb, double speedMod)
@@ -456,7 +456,6 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                                 extendServo.setPower(-0.55);
-                                drive(BACKWARD, 0.1);
                             }
                             if (finalTime < turn1 && finalTime > rotate1)
                             {
@@ -468,10 +467,12 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                drive(STOP, 0.0);
+                                drive(BACKWARD, 0.3);
                             }
                             if ((finalTime > turn1) && !autoHome)
                             {
+                                lift(OFF, 0.0);
+                                drive(STOP, 0.0);
                                 resetTime = 3;
                                 timeReset = false;
                             }
