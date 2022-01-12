@@ -456,7 +456,7 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                                 extendServo.setPower(-0.55);
-                                drive(BACKWARD, 0.3);
+                                drive(BACKWARD, 0.1);
                             }
                             if (finalTime < turn1 && finalTime > rotate1)
                             {
