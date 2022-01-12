@@ -67,7 +67,7 @@ public class FreightFrenzyTeleOP extends OpMode
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
-        liftMotorZero = liftMotor.getCurrentPosition();
+        liftMotorZero = liftMotor.getCurrentPosition()+ 200;
 
         clawServo = hardwareMap.crservo.get("clawServo");
         spinServo = hardwareMap.crservo.get("spinServo");
@@ -281,6 +281,11 @@ public class FreightFrenzyTeleOP extends OpMode
         if (gamepad2.right_stick_x == 0 && spinning) // Reset spinning flag
         {
             spinning = false;
+        }
+
+        if (gamepad2.square)
+        {
+            spinPos = 0.2;
         }
 
         // Clamp for spin motor
