@@ -497,6 +497,7 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
                             if (timeReset && finalTime > pan4)
                             {
                                 drive(STOP, 0.0);
+                                spinServo.setPower(0.06115);
                             }
                         }
                     }
