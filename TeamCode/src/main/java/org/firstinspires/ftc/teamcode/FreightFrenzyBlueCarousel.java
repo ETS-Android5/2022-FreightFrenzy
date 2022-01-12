@@ -70,7 +70,7 @@ public class FreightFrenzyBlueCarousel extends LinearOpMode {
     private int turn1 = rotate1 + 500;
 
     // resetTime == 3
-    private int pan4 = 2000;
+    private int pan4 = 2500;
     private int drive5 = pan4 + 1500;
 
     public void drive (String fb, double speedMod)
