@@ -283,6 +283,11 @@ public class FreightFrenzyTeleOP extends OpMode
             spinning = false;
         }
 
+        if (gamepad2.square)
+        {
+            spinPos = 0.2;
+        }
+
         // Clamp for spin motor
         if (spinPos < -0.11)
         {
