@@ -397,11 +397,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                             }
-                            if (touchSensor.isPressed())
+                            if (finalTime > pan2 && touchSensor.isPressed())
                             {
                                 resetTime = 2;
                                 timeReset = false;
-                            }
+                            } // try resetStartTime() and getRuntime()
                         }
                         if (resetTime == 2)
                         {
