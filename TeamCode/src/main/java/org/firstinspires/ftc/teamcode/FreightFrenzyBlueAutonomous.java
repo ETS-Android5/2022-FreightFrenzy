@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
 public class FreightFrenzyBlueAutonomous extends LinearOpMode {
@@ -47,7 +47,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private DcMotor duckMotor = null;
     private DcMotor liftMotor = null;
 
-    private DigitalChannel touchSensor;
+    private TouchSensor touchSensor;
 
     private int liftMotorPos;
     private int liftMotorZero;
@@ -251,8 +251,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
 
-        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
-        touchSensor.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor = hardwareMap.touchSensor.get("touchSensor");
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -383,7 +382,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT, 0.3);
                             }
-                            if (finalTime > pan2 && touchSensor.getState())
+                            if (finalTime > pan2 && !touchSensor.isPressed())
                             {
                                 drive(BACKWARD, 0.3);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
@@ -397,7 +396,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                             }
-                            if (!touchSensor.getState())
+                            if (touchSensor.isPressed())
                             {
                                 resetTime = 2;
                                 timeReset = false;
