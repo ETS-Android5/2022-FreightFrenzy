@@ -328,6 +328,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
                         telemetry.addData("Auto home: ", autoHome);
+                        telemetry.addData("Touch sensor: ", touchSensor.isPressed());
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -447,7 +448,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (completedLower)
                             {
                                 clawServo.setPower(-0.38);
-                                resetTime = 2;
+                                resetTime = 3;
                                 timeReset = false;
                             }
                         }
