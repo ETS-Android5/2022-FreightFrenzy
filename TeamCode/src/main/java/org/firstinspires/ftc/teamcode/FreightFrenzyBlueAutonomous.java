@@ -251,7 +251,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
 
-        touchSensor = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -383,7 +383,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT, 0.3);
                             }
-                            if (finalTime > pan2 && !touchSensor.getState())
+                            if (finalTime > pan2 && touchSensor.getState())
                             {
                                 drive(BACKWARD, 0.3);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
@@ -397,7 +397,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                             }
-                            if (touchSensor.getState())
+                            if (!touchSensor.getState())
                             {
                                 resetTime = 2;
                                 timeReset = false;
