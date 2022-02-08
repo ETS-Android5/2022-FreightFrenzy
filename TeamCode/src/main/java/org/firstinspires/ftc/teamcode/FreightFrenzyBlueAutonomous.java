@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 @Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
 public class FreightFrenzyBlueAutonomous extends LinearOpMode {
@@ -45,6 +46,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private DcMotor duckMotor = null;
     private DcMotor liftMotor = null;
+
+    private DigitalChannel touchSensor;
 
     private int liftMotorPos;
     private int liftMotorZero;
@@ -226,7 +229,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private TFObjectDetector tfod;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         // control hub 1
         frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
         frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
@@ -235,7 +239,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         duckMotor = hardwareMap.dcMotor.get("duckMotor");
         liftMotor = hardwareMap.dcMotor.get("liftMotor");
 
-        //setting the direction for each motor
+        // setting the direction for each motor
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -247,6 +251,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
 
+        touchSensor = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -256,7 +263,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
-        if (tfod != null) {
+        if (tfod != null)
+        {
             tfod.activate();
 
             // The TensorFlow software will scale the input images from the camera to a lower resolution.
@@ -273,22 +281,27 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
+        if (opModeIsActive())
+        {
             long initTime = System.currentTimeMillis();
             long finalTime;
             liftMotorZero = liftMotor.getCurrentPosition();
-            while (opModeIsActive()) {
-                if (tfod != null) {
+            while (opModeIsActive())
+            {
+                if (tfod != null)
+                {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     List<String> labels = new ArrayList<String>();
-                    if (updatedRecognitions != null) {
+                    if (updatedRecognitions != null)
+                    {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
 
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
+                        for (Recognition recognition : updatedRecognitions)
+                        {
                             telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                             telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                     recognition.getLeft(), recognition.getTop());
@@ -305,12 +318,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         liftMotorPos = liftMotor.getCurrentPosition() - liftMotorZero;
 
                         telemetry.addData("Loop count:", loopCount);
-                        if (resetTime /* == 0 */ < 9)
-                        {
-                            telemetry.addData("Time is: ", finalTime);
-                            telemetry.addData("Ms/loop: ", finalTime / loopCount);
-                            telemetry.addData("Reset time is: ", resetTime);
-                        }
+                        telemetry.addData("Time is: ", finalTime);
+                        telemetry.addData("Ms/loop: ", finalTime / loopCount);
+                        telemetry.addData("Reset time is: ", resetTime);
                         /* if (resetTime > 0)
                         {
                             telemetry.addData("Time is:", finalTime + timeDifference);
@@ -373,7 +383,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT, 0.3);
                             }
-                            if (finalTime < drive3 && finalTime > pan2)
+                            if (finalTime > pan2 && !touchSensor.getState())
                             {
                                 drive(BACKWARD, 0.3);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
@@ -387,6 +397,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
                             }
+                            if (touchSensor.getState())
+                            {
+                                resetTime = 2;
+                                timeReset = false;
+                            }
+                        }
+                        if (resetTime == 2)
+                        {
                             if (finalTime < pan3 && finalTime > drive3)
                             {
                                 pan(LEFT, 0.3);
@@ -434,7 +452,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 timeReset = false;
                             }
                         }
-                        if (resetTime == 2)
+                        if (resetTime == 3)
                         {
                             if (!timeReset) {
                                 timeDifference = finalTime;
@@ -474,11 +492,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if ((finalTime > turn1) && !autoHome)
                             {
                                 turn(STOP);
-                                resetTime = 3;
+                                resetTime = 4;
                                 timeReset = false;
                             }
                         }
-                        if (resetTime == 3)
+                        if (resetTime == 4)
                         {
                             if (!autoHome)
                             {

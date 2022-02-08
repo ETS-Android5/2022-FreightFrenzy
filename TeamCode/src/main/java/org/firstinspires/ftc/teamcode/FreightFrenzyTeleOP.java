@@ -215,9 +215,13 @@ public class FreightFrenzyTeleOP extends OpMode
         {
             intakeMotor.setPower(0.9);
         }
-        else if(gamepad1.left_trigger > 0 || gamepad1.touchpad || gamepad1.y || gamepad1.x) // Reverse for intake motor
+        else if (gamepad1.left_trigger > 0 || gamepad1.touchpad || gamepad1.y || gamepad1.x) // Reverse for intake motor
         {
             intakeMotor.setPower(-0.7);
+        }
+        else if (gamepad1.b) // Stops the intake motor completely
+        {
+            intakeMotor.setPower(0.0);
         }
         else // Runs the motor for the entirety of code
         {
