@@ -47,7 +47,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private DcMotor duckMotor = null;
     private DcMotor liftMotor = null;
 
-    private TouchSensor touchSensor;
+    private TouchSensor backLeftTouch, backRightTouch;
+    private boolean backLeftTouched = false;
+    private boolean backRightTouched = false;
+    private long initBackupTime = 6418;
+    private long backupTime = -6418;
 
     private int liftMotorPos;
     private int liftMotorZero;
@@ -63,16 +67,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private int bup = pan1 + 200;
     private int duck1 = bup + 3600;
     private int pan2 = duck1 + 2250;
-    private int drive3 = pan2 + 750;
-    private int pan3 = drive3 + 2600;
-    private int drive4 = pan3 + 1000;
 
     // resetTime == 2
+    private int pan3 = 2600;
+    private int drive4 = pan3 + 1000; // drive 2 and 3 currently don't exist, pls understand
+
+    // resetTime == 3
     private int wait1 = 1000;
     private int rotate1 = wait1 + 1500;
     private int turn1 = rotate1 + 1250;
 
-    // resetTime == 3
+    // resetTime == 4
     private int pan4 = 300;
     private int drive5 = pan4 + 1750;
     private int turn2 = drive5 + 2000;
@@ -251,7 +256,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         spinServo = hardwareMap.crservo.get("spinServo");
         extendServo = hardwareMap.crservo.get("extendServo");
 
-        touchSensor = hardwareMap.touchSensor.get("touchSensor");
+        backLeftTouch = hardwareMap.touchSensor.get("backLeftTouch");
+        backRightTouch = hardwareMap.touchSensor.get("backRightTouch");
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -328,7 +334,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
                         telemetry.addData("Auto home: ", autoHome);
-                        telemetry.addData("Touch sensor: ", touchSensor.isPressed());
+                        telemetry.addData("BL touch sensor: ", backLeftTouch.isPressed());
+                        telemetry.addData("BR touch sensor: ", backRightTouch.isPressed());
+                        telemetry.addData("Backup time", backupTime);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -383,10 +391,20 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT, 0.3);
                             }
-                            if (finalTime > pan2 && !touchSensor.isPressed())
+                            if (finalTime > pan2 && (!backLeftTouched && !backRightTouched))
                             {
                                 drive(BACKWARD, 0.3);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
+
+                                if (initBackupTime == 6418)
+                                {
+                                    initBackupTime = System.currentTimeMillis();
+                                }
+                                else
+                                {
+                                    backupTime = System.currentTimeMillis() - initBackupTime;
+                                }
+
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
                                     lift(ON, 1.0);
@@ -396,16 +414,33 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
+
+                                if (backLeftTouch.isPressed())
+                                {
+                                    backLeftTouched = true;
+                                }
+                                if (backRightTouch.isPressed())
+                                {
+                                    backRightTouched = true;
+                                }
                             }
-                            if (finalTime > pan2 && touchSensor.isPressed())
+                            if (finalTime > pan2 && ((backLeftTouched && backRightTouched) || backupTime > 3000))
                             {
+                                drive(STOP, 0.0);
                                 resetTime = 2;
                                 timeReset = false;
                             } // try resetStartTime() and getRuntime()
                         }
                         if (resetTime == 2)
                         {
-                            if (finalTime < pan3 && finalTime > drive3)
+                            if (!timeReset)
+                            {
+                                timeDifference = finalTime;
+                                initTime = System.currentTimeMillis();
+                                finalTime = System.currentTimeMillis() - initTime;
+                                timeReset = true;
+                            }
+                            if (finalTime < pan3)
                             {
                                 pan(LEFT, 0.3);
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
