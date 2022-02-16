@@ -396,7 +396,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 duck(OFF);
                                 pan(LEFT, 0.3);
                             }
-                            if (finalTime > pan2 && (!backLeftTouched && !backRightTouched))
+                            if (finalTime > pan2 && !(backLeftTouched && backRightTouched))
                             {
                                 drive(BACKWARD, 0.3);
                                 spinServo.setPower(0.1863); // position for it to deliver duck, obtained through testing in TeleOp
