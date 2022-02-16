@@ -192,7 +192,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         }
         else if ((liftMotorPos >= 200) && elementPosition != 1)
         {
-            liftMotor.setPower(-0.111);
+            liftMotor.setPower(-0.222);
         }
         else
         {
@@ -412,7 +412,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 0.333);
+                                    lift(ON, 0.4);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -450,7 +450,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 pan(LEFT, 0.3);
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 0.333);
+                                    lift(ON, 0.4);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -463,7 +463,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 drive(FORWARD, 0.3);
                                 if (elementPosition == 3 && liftMotorPos <= 5300)
                                 {
-                                    lift(ON, 0.333);
+                                    lift(ON, 0.4);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -476,7 +476,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos >= -125)
                                 {
-                                    lift(ON, -0.111);
+                                    lift(ON, -0.222);
                                 }
                                 else
                                 {
@@ -508,7 +508,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
-                                    lift(ON, 0.111);
+                                    lift(ON, 0.222);
                                 }
                                 else
                                 {
@@ -521,7 +521,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
-                                    lift(ON, 0.111);
+                                    lift(ON, 0.222);
                                 }
                                 else
                                 {
