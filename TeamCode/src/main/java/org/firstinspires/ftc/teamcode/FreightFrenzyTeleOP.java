@@ -195,7 +195,7 @@ public class FreightFrenzyTeleOP extends OpMode
         // Set lift to zero position at start of TeleOP
         if (startLift && liftMotor.getCurrentPosition() < liftMotorZero)
         {
-            liftPower = 1.0;
+            liftPower = 0.6;
         }
         else // Normal function, rest of TeleOP
         {
