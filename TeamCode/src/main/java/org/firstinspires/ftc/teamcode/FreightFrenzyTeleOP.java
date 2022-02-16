@@ -200,7 +200,7 @@ public class FreightFrenzyTeleOP extends OpMode
         else // Normal function, rest of TeleOP
         {
             startLift = false;
-            liftPower = Range.clip(lift, -1.0, 1.0);
+            liftPower = Range.clip(lift, -0.6, 0.6);
         }
         liftMotor.setPower(liftPower);
 

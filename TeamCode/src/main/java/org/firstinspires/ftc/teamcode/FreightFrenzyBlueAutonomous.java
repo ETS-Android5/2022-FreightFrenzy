@@ -188,11 +188,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         boolean doneLowering = false;
         if ((liftMotorPos >= 1200) && elementPosition != 1)
         {
-            liftMotor.setPower(-1.0);
+            liftMotor.setPower(-0.333);
         }
         else if ((liftMotorPos >= 200) && elementPosition != 1)
         {
-            liftMotor.setPower(-0.3);
+            liftMotor.setPower(-0.111);
         }
         else
         {
@@ -334,9 +334,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("Element position: ", elementPosition);
                         telemetry.addData("Lift motor position: ", liftMotorPos);
                         telemetry.addData("Auto home: ", autoHome);
-                        telemetry.addData("BL touch sensor: ", backLeftTouch.isPressed());
-                        telemetry.addData("BR touch sensor: ", backRightTouch.isPressed());
+                        telemetry.addData("BL touch sensor: ", backLeftTouched);
+                        telemetry.addData("BR touch sensor: ", backRightTouched);
                         telemetry.addData("Backup time", backupTime);
+
+                        telemetry.addData("blTouched + brTouched", backLeftTouched && backRightTouched);
+                        telemetry.addData("backupTime > 3000", backupTime > 3000);
+                        telemetry.addData("both", (backLeftTouched && backRightTouched) || backupTime > 3000);
+                        telemetry.addData("all", finalTime > pan2 && ((backLeftTouched && backRightTouched) || backupTime > 3000));
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -407,7 +412,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 1.0);
+                                    lift(ON, 0.333);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -445,7 +450,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 pan(LEFT, 0.3);
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 1.0);
+                                    lift(ON, 0.333);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -458,7 +463,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 drive(FORWARD, 0.3);
                                 if (elementPosition == 3 && liftMotorPos <= 5300)
                                 {
-                                    lift(ON, 1.0);
+                                    lift(ON, 0.333);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -471,7 +476,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos >= -125)
                                 {
-                                    lift(ON, -0.3);
+                                    lift(ON, -0.111);
                                 }
                                 else
                                 {
@@ -503,7 +508,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
-                                    lift(ON, 0.3);
+                                    lift(ON, 0.111);
                                 }
                                 else
                                 {
@@ -516,7 +521,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             {
                                 if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
-                                    lift(ON, 0.3);
+                                    lift(ON, 0.111);
                                 }
                                 else
                                 {
