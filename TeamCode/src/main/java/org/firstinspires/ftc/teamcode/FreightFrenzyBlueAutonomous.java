@@ -190,7 +190,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         {
             liftMotor.setPower(-0.333);
         }
-        else if ((liftMotorPos >= 200) && elementPosition != 1)
+        else if ((liftMotorPos >= 300) && elementPosition != 1)
         {
             liftMotor.setPower(-0.222);
         }
@@ -412,7 +412,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 0.4);
+                                    lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -450,7 +450,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 pan(LEFT, 0.3);
                                 if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
                                 {
-                                    lift(ON, 0.4);
+                                    lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
@@ -461,9 +461,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive4 && finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
-                                if (elementPosition == 3 && liftMotorPos <= 5300)
+                                if (elementPosition == 3 && liftMotorPos <= 6000)
                                 {
-                                    lift(ON, 0.4);
+                                    lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
                                 }
                                 else
