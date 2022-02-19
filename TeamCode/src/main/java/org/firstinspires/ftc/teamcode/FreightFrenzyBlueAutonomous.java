@@ -556,7 +556,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
 
-                                if (lastAngles.firstAngle < 87)
+                                if (currentAngle < 87)
                                 {
                                     turn(LEFT);
                                 }
