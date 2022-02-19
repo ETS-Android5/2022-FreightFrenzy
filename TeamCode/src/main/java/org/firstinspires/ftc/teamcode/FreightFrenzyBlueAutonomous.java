@@ -363,6 +363,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("BR touch sensor: ", backRightTouched);
                         telemetry.addData("Backup time", backupTime);
 
+                        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                         telemetry.addData("Rotation", lastAngles.firstAngle);
 
                         // initial step - detect what position duck/team element is in
