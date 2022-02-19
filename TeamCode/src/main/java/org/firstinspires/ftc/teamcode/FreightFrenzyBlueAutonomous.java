@@ -14,6 +14,13 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
 public class FreightFrenzyBlueAutonomous extends LinearOpMode {
@@ -52,6 +59,10 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private boolean backRightTouched = false;
     private long initBackupTime = 6418;
     private long backupTime = -6418;
+
+    private BNO055IMU imu;
+    private Orientation lastAngles = new Orientation();
+    private double globalAngle, correction;
 
     private int liftMotorPos;
     private int liftMotorZero;
@@ -259,6 +270,14 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         backLeftTouch = hardwareMap.touchSensor.get("backLeftTouch");
         backRightTouch = hardwareMap.touchSensor.get("backRightTouch");
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -279,6 +298,12 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
             tfod.setZoom(1.0, 16.0/9.0);
+        }
+
+        while (!isStopRequested() && !imu.isGyroCalibrated())
+        {
+            sleep(50);
+            idle();
         }
 
         /** Wait for the game to begin */
@@ -338,10 +363,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("BR touch sensor: ", backRightTouched);
                         telemetry.addData("Backup time", backupTime);
 
-                        telemetry.addData("blTouched + brTouched", backLeftTouched && backRightTouched);
-                        telemetry.addData("backupTime > 3000", backupTime > 3000);
-                        telemetry.addData("both", (backLeftTouched && backRightTouched) || backupTime > 3000);
-                        telemetry.addData("all", finalTime > pan2 && ((backLeftTouched && backRightTouched) || backupTime > 3000));
+                        telemetry.addData("Rotation", lastAngles.firstAngle);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -506,7 +528,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < rotate1 && finalTime > wait1)
                             {
-                                if (elementPosition == 1 && liftMotorPos <= 200)
+                                if (elementPosition == 1 && liftMotorPos <= 100)
                                 {
                                     lift(ON, 0.222);
                                 }
@@ -519,7 +541,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < turn1 && finalTime > rotate1)
                             {
-                                if (elementPosition == 1 && liftMotorPos <= 50)
+                                if (elementPosition == 1 && liftMotorPos <= 100)
                                 {
                                     lift(ON, 0.222);
                                 }
