@@ -63,6 +63,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private float currentAngle;
+    private float finalRotAngle = 64.18f;
     private boolean finishedTurning = false;
 
     private int liftMotorPos;
@@ -368,6 +369,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("BR touch sensor: ", backRightTouched);
                         telemetry.addData("Backup time", backupTime);
                         telemetry.addData("Rotation", currentAngle);
+                        telemetry.addData("Final angle after turning", finalRotAngle);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -532,7 +534,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime < rotate1 && finalTime > wait1)
                             {
-                                if (elementPosition == 1 && liftMotorPos <= 100)
+                                if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.222);
                                 }
@@ -545,7 +547,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime > rotate1 && !finishedTurning)
                             {
-                                if (elementPosition == 1 && liftMotorPos <= 100)
+                                if (elementPosition == 1 && liftMotorPos <= 200)
                                 {
                                     lift(ON, 0.222);
                                 }
@@ -562,11 +564,12 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     turn(STOP);
                                     finishedTurning = true;
+                                    finalRotAngle = currentAngle;
                                 }
                             }
                             if (finalTime > rotate1 && finishedTurning)
                             {
-                                resetTime = 4;
+                                resetTime = 5;
                                 timeReset = false;
                             }
                         }
