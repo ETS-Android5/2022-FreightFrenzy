@@ -147,19 +147,37 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     public void pan (String lr, double speedMod)
     {
+        double correction, gain = 0.1;
+        float startingAngle = 6418f;
+
+        if (startingAngle == 6418f)
+        {
+            startingAngle = currentAngle;
+        }
+
+        if (currentAngle == startingAngle)
+        {
+            correction = 0;
+        }
+        else
+        {
+            correction = -currentAngle - startingAngle;
+            correction *= gain;
+        }
+
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-speedMod);
-            frontRightMotor.setPower(-speedMod);
-            backLeftMotor.setPower(speedMod);
-            backRightMotor.setPower(speedMod);
+            frontLeftMotor.setPower(-speedMod - correction);
+            frontRightMotor.setPower(-speedMod - correction);
+            backLeftMotor.setPower(speedMod + correction);
+            backRightMotor.setPower(speedMod + correction);
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(speedMod);
-            frontRightMotor.setPower(speedMod);
-            backLeftMotor.setPower(-speedMod);
-            backRightMotor.setPower(-speedMod);
+            frontLeftMotor.setPower(speedMod + correction);
+            frontRightMotor.setPower(speedMod + correction);
+            backLeftMotor.setPower(-speedMod - correction);
+            backRightMotor.setPower(-speedMod - correction);
         }
         if (lr.equals("stop"))
         {
