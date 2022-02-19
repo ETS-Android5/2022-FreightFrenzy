@@ -147,7 +147,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     public void pan (String lr, double speedMod, float startingAngle)
     {
-        double correction, gain = 0.1;
+        double correction, gain = 0.03;
 
         if (currentAngle > startingAngle - 2 && currentAngle < startingAngle + 2)
         {
