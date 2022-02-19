@@ -161,17 +161,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-speedMod - correction);
-            frontRightMotor.setPower(-speedMod - correction);
-            backLeftMotor.setPower(speedMod + correction);
-            backRightMotor.setPower(speedMod + correction);
+            frontLeftMotor.setPower(-speedMod - (speedMod * correction));
+            frontRightMotor.setPower(-speedMod - (speedMod * correction));
+            backLeftMotor.setPower(speedMod + (speedMod * correction));
+            backRightMotor.setPower(speedMod + (speedMod * correction));
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(speedMod + correction);
-            frontRightMotor.setPower(speedMod + correction);
-            backLeftMotor.setPower(-speedMod - correction);
-            backRightMotor.setPower(-speedMod - correction);
+            frontLeftMotor.setPower(speedMod + (speedMod * correction));
+            frontRightMotor.setPower(speedMod + (speedMod * correction));
+            backLeftMotor.setPower(-speedMod - (speedMod * correction));
+            backRightMotor.setPower(-speedMod - (speedMod * correction));
         }
         if (lr.equals("stop"))
         {
