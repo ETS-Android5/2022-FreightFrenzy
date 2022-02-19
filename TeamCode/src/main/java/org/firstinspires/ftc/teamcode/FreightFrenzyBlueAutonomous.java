@@ -62,7 +62,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
-    private double globalAngle, correction;
+    private float currentAngle;
+    private boolean finishedTurning = false;
 
     private int liftMotorPos;
     private int liftMotorZero;
@@ -86,7 +87,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     // resetTime == 3
     private int wait1 = 1000;
     private int rotate1 = wait1 + 1500;
-    private int turn1 = rotate1 + 1250;
+    // private int turn1 = rotate1 + 1250;
 
     // resetTime == 4
     private int pan4 = 300;
@@ -316,6 +317,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
             long initTime = System.currentTimeMillis();
             long finalTime;
             liftMotorZero = liftMotor.getCurrentPosition();
+            lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            float zeroAngle = lastAngles.firstAngle;
             while (opModeIsActive())
             {
                 if (tfod != null)
@@ -346,6 +349,8 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         finalTime = System.currentTimeMillis() - initTime;
                         loopCount += 1;
                         liftMotorPos = liftMotor.getCurrentPosition() - liftMotorZero;
+                        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                        currentAngle = lastAngles.firstAngle - zeroAngle;
 
                         telemetry.addData("Loop count:", loopCount);
                         telemetry.addData("Time is: ", finalTime);
@@ -362,9 +367,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                         telemetry.addData("BL touch sensor: ", backLeftTouched);
                         telemetry.addData("BR touch sensor: ", backRightTouched);
                         telemetry.addData("Backup time", backupTime);
-
-                        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        telemetry.addData("Rotation", lastAngles.firstAngle);
+                        telemetry.addData("Rotation", currentAngle);
 
                         // initial step - detect what position duck/team element is in
                         if (finalTime > 1500 && !elementFound)
@@ -540,7 +543,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 extendServo.setPower(-0.55);
                                 drive(BACKWARD, 0.1);
                             }
-                            if (finalTime < turn1 && finalTime > rotate1)
+                            if (finalTime > rotate1 && !finishedTurning)
                             {
                                 if (elementPosition == 1 && liftMotorPos <= 100)
                                 {
@@ -550,11 +553,19 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                turn(LEFT);
+
+                                if (lastAngles.firstAngle < 87)
+                                {
+                                    turn(LEFT);
+                                }
+                                else
+                                {
+                                    turn(STOP);
+                                    finishedTurning = true;
+                                }
                             }
-                            if ((finalTime > turn1) && !autoHome)
+                            if (finalTime > rotate1 && finishedTurning)
                             {
-                                turn(STOP);
                                 resetTime = 4;
                                 timeReset = false;
                             }
