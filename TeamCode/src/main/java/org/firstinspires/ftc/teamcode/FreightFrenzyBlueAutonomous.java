@@ -186,11 +186,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     private void autoHoming() // see TeleOp for notes
     {
         boolean doneLowering = false;
-        if ((liftMotorPos >= 1200) && elementPosition != 1)
+        if ((liftMotorPos >= 400) && elementPosition != 1)
         {
-            liftMotor.setPower(-0.333);
+            liftMotor.setPower(-0.5);
         }
-        else if ((liftMotorPos >= 300) && elementPosition != 1)
+        else if ((liftMotorPos >= 50) && elementPosition != 1)
         {
             liftMotor.setPower(-0.222);
         }
@@ -410,7 +410,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     backupTime = System.currentTimeMillis() - initBackupTime;
                                 }
 
-                                if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 6000))
+                                if ((elementPosition == 2 && liftMotorPos <= 800) || (elementPosition == 3 && liftMotorPos <= 2300))
                                 {
                                     lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
@@ -448,7 +448,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < pan3)
                             {
                                 pan(LEFT, 0.3);
-                                if ((elementPosition == 2 && liftMotorPos <= 2300) || (elementPosition == 3 && liftMotorPos <= 5300))
+                                if ((elementPosition == 2 && liftMotorPos <= 800) || (elementPosition == 3 && liftMotorPos <= 2300))
                                 {
                                     lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
@@ -461,7 +461,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive4 && finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
-                                if (elementPosition == 3 && liftMotorPos <= 5300)
+                                if (elementPosition == 3 && liftMotorPos <= 2300)
                                 {
                                     lift(ON, 0.5);
                                     telemetry.addData("Lift Motor Position: ", liftMotorPos);
