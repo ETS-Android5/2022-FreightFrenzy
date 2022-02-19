@@ -62,7 +62,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
-    private float currentAngle;
+    private float currentAngle, panningAngle;
     private float finalRotAngle = 64.18f;
     private boolean finishedTurning = false;
 
@@ -145,15 +145,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         }
     }
 
-    public void pan (String lr, double speedMod)
+    public void pan (String lr, double speedMod, float startingAngle)
     {
         double correction, gain = 0.1;
-        float startingAngle = 6418f;
-
-        if (startingAngle == 6418f)
-        {
-            startingAngle = currentAngle;
-        }
 
         if (currentAngle == startingAngle)
         {
@@ -423,24 +417,26 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < stop1 && finalTime > drive1)
                             {
                                 drive(STOP, 0.0);
+                                panningAngle = currentAngle;
                             }
                             if (finalTime < pan1 && finalTime > stop1)
                             {
-                                pan(RIGHT, 0.3);
+                                pan(RIGHT, 0.3, panningAngle);
                             }
                             if (finalTime < bup && finalTime > pan1)
                             {
-                                pan(RIGHT, 0.15);
+                                pan(RIGHT, 0.15, panningAngle);
                             }
                             if (finalTime < duck1 && finalTime > bup)
                             {
                                 drive(STOP, 0.0);
                                 duck(ON);
+                                panningAngle = currentAngle;
                             }
                             if (finalTime < pan2 && finalTime > duck1)
                             {
                                 duck(OFF);
-                                pan(LEFT, 0.3);
+                                pan(LEFT, 0.3, panningAngle);
                             }
                             if (finalTime > pan2 && !(backLeftTouched && backRightTouched))
                             {
@@ -490,10 +486,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 initTime = System.currentTimeMillis();
                                 finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
+                                panningAngle = currentAngle;
                             }
                             if (finalTime < pan3)
                             {
-                                pan(LEFT, 0.3);
+                                pan(LEFT, 0.3, panningAngle);
                                 if ((elementPosition == 2 && liftMotorPos <= 800) || (elementPosition == 3 && liftMotorPos <= 2300))
                                 {
                                     lift(ON, 0.5);
@@ -603,10 +600,11 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 finalTime = System.currentTimeMillis() - initTime;
                                 timeReset = true;
                                 startHomeFrame = loopCount;
+                                panningAngle = currentAngle;
                             }
                             if (timeReset && finalTime < pan4)
                             {
-                                pan(RIGHT, 0.3);
+                                pan(RIGHT, 0.3, panningAngle);
                             }
                             if (timeReset && finalTime < drive5 && finalTime > pan4)
                             {
