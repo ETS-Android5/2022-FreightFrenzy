@@ -149,7 +149,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     {
         double correction, gain = 0.1;
 
-        if (currentAngle < startingAngle - 2 && currentAngle > startingAngle + 2)
+        if (currentAngle > startingAngle - 2 && currentAngle < startingAngle + 2)
         {
             correction = 0;
         }
@@ -161,17 +161,17 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-speedMod - (speedMod * correction));
-            frontRightMotor.setPower(-speedMod + (speedMod * correction));
-            backLeftMotor.setPower(speedMod - (speedMod * correction));
-            backRightMotor.setPower(speedMod + (speedMod * correction));
+            frontLeftMotor.setPower(-speedMod + (speedMod * correction));
+            frontRightMotor.setPower(-speedMod - (speedMod * correction));
+            backLeftMotor.setPower(speedMod + (speedMod * correction));
+            backRightMotor.setPower(speedMod - (speedMod * correction));
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(speedMod - (speedMod * correction));
-            frontRightMotor.setPower(speedMod + (speedMod * correction));
-            backLeftMotor.setPower(-speedMod - (speedMod * correction));
-            backRightMotor.setPower(-speedMod + (speedMod * correction));
+            frontLeftMotor.setPower(speedMod + (speedMod * correction));
+            frontRightMotor.setPower(speedMod - (speedMod * correction));
+            backLeftMotor.setPower(-speedMod + (speedMod * correction));
+            backRightMotor.setPower(-speedMod - (speedMod * correction));
         }
         if (lr.equals("stop"))
         {
