@@ -93,7 +93,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     // resetTime == 4
     private int pan4 = 300;
     private int drive5 = pan4 + 1750;
-    private int turn2 = drive5 + 2000;
+    // private int turn2 = drive5 + 2000;
 
     public void drive (String fb, double speedMod)
     {
@@ -556,7 +556,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                     lift(OFF, 0.0);
                                 }
 
-                                if (currentAngle < 75)
+                                if (currentAngle < 76.25)
                                 {
                                     turn(LEFT);
                                 }
@@ -569,7 +569,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (finalTime > rotate1 && finishedTurning)
                             {
-                                resetTime = 5;
+                                resetTime = 4;
                                 timeReset = false;
                             }
                         }
@@ -593,16 +593,24 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (timeReset && finalTime < drive5 && finalTime > pan4)
                             {
                                 drive(FORWARD, 0.8);
+                                finishedTurning = false;
                             }
-                            if (timeReset && finalTime < turn2 && finalTime > drive5)
+                            if (timeReset && finalTime > drive5 && !finishedTurning)
                             {
-                                turn(RIGHT);
                                 spinServo.setPower(-0.0777);
                                 telemetry.addData("We did it Reddit!", "");
+                                if (currentAngle > -29.75)
+                                {
+                                    turn(RIGHT);
+                                }
+                                else
+                                {
+                                    turn(STOP);
+                                    finishedTurning = true;
+                                }
                             }
-                            if (timeReset && finalTime > turn2)
+                            if (timeReset && finalTime > drive5 && finishedTurning)
                             {
-                                drive(STOP, 0.0);
                                 spinServo.setPower(0.07);
                             }
                         }
