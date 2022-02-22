@@ -19,8 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @Autonomous(name = "Blue Autonomous Default Route", group = "Concept")
 public class FreightFrenzyBlueAutonomous extends LinearOpMode {
@@ -155,7 +153,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         }
         else
         {
-            correction = currentAngle - startingAngle;
+            correction = startingAngle - currentAngle;
             correction *= gain;
         }
 
