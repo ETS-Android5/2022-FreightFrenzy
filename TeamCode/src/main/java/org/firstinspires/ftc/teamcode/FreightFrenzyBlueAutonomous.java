@@ -76,7 +76,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     // resetTime == 1
     private int drive1 = 500; // modify this based on optimal battery speed
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 2600;
+    private int pan1 = stop1 + 2450;
     private int bup = pan1 + 200;
     private int duck1 = bup + 3600;
     private int pan2 = duck1 + 2250;
@@ -156,22 +156,22 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         else
         {
             correction = -currentAngle - startingAngle;
-            correction *= gain;
+            correction *= gain * speedMod;
         }
 
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-speedMod + (speedMod * correction));
-            frontRightMotor.setPower(-speedMod - (speedMod * correction));
-            backLeftMotor.setPower(speedMod + (speedMod * correction));
-            backRightMotor.setPower(speedMod - (speedMod * correction));
+            frontLeftMotor.setPower(-speedMod + correction);
+            frontRightMotor.setPower(-speedMod - correction);
+            backLeftMotor.setPower(speedMod + correction);
+            backRightMotor.setPower(speedMod - correction);
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(speedMod + (speedMod * correction));
-            frontRightMotor.setPower(speedMod - (speedMod * correction));
-            backLeftMotor.setPower(-speedMod + (speedMod * correction));
-            backRightMotor.setPower(-speedMod - (speedMod * correction));
+            frontLeftMotor.setPower(speedMod + correction);
+            frontRightMotor.setPower(speedMod - correction);
+            backLeftMotor.setPower(-speedMod + correction);
+            backRightMotor.setPower(-speedMod - correction);
         }
         if (lr.equals("stop"))
         {
@@ -504,6 +504,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive4 && finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
+
                                 if (elementPosition == 3 && liftMotorPos <= 2300)
                                 {
                                     lift(ON, 0.5);
@@ -513,7 +514,15 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-                                extendServo.setPower(-0.4);
+
+                                if (elementPosition == 1)
+                                {
+                                    extendServo.setPower(-0.475);
+                                }
+                                else
+                                {
+                                    extendServo.setPower(-0.4);
+                                }
                             }
                             if (finalTime > drive4)
                             {
