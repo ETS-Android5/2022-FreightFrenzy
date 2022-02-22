@@ -68,7 +68,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
 
     private int liftMotorPos;
     private int liftMotorZero;
-    
+
     // variables for auto homing
     private long startHomeFrame;
     private boolean autoHome = false;
@@ -76,7 +76,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     // resetTime == 1
     private int drive1 = 500; // modify this based on optimal battery speed
     private int stop1 = drive1 + 100;
-    private int pan1 = stop1 + 2450;
+    private int pan1 = stop1 + 2600;
     private int bup = pan1 + 200;
     private int duck1 = bup + 3600;
     private int pan2 = duck1 + 2250;
@@ -156,22 +156,22 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         else
         {
             correction = -currentAngle - startingAngle;
-            correction *= gain * speedMod;
+            correction *= gain;
         }
 
         if (lr.equals("left"))
         {
-            frontLeftMotor.setPower(-speedMod + correction);
-            frontRightMotor.setPower(-speedMod - correction);
-            backLeftMotor.setPower(speedMod + correction);
-            backRightMotor.setPower(speedMod - correction);
+            frontLeftMotor.setPower(-speedMod + (speedMod * correction));
+            frontRightMotor.setPower(-speedMod - (speedMod * correction));
+            backLeftMotor.setPower(speedMod + (speedMod * correction));
+            backRightMotor.setPower(speedMod - (speedMod * correction));
         }
         if (lr.equals("right"))
         {
-            frontLeftMotor.setPower(speedMod + correction);
-            frontRightMotor.setPower(speedMod - correction);
-            backLeftMotor.setPower(-speedMod + correction);
-            backRightMotor.setPower(-speedMod - correction);
+            frontLeftMotor.setPower(speedMod + (speedMod * correction));
+            frontRightMotor.setPower(speedMod - (speedMod * correction));
+            backLeftMotor.setPower(-speedMod + (speedMod * correction));
+            backRightMotor.setPower(-speedMod - (speedMod * correction));
         }
         if (lr.equals("stop"))
         {
@@ -239,9 +239,9 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private static final String TFOD_MODEL_ASSET = "amogus.tflite";
     private static final String[] LABELS =
-    {
-      "element"
-    };
+            {
+                    "element"
+            };
 
     private static final String VUFORIA_KEY =
             "AX54Lyj/////AAABmSsIALipi0y4oiZBAoZS4o4Jppp+qbLTWgVQVVuyveVi7sLhVC8XAwvTGDzKpxm1tiMRMLgYEV3Y5YXvqKMiA7R7TUZQcZeyL9MMGoqcq7rIeFMX01KOuZUmfs754hgbnsINn38JjhLLAH3g2GuKF9QZBF/CJqw/UFKKzR8bDlv4TkkTP8AyxvF9Vyv9G9gQhK2HoOWuSCWQHzIWl+op5LEPLXU7RmdrWzxDm1zEY3DZoax5pYLMRR349NoNzpUFBzwNu+nmEzT3eXQqtppz/vE/gHA0LRys9MAktPmeXQfvaS2YUi4UdE4PcFxfCUPuWe6L9xOQmUBE7hB39jTRkYxGADmTxILyBZB6fD3qyFHv";
@@ -504,7 +504,6 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             if (finalTime < drive4 && finalTime > pan3)
                             {
                                 drive(FORWARD, 0.3);
-
                                 if (elementPosition == 3 && liftMotorPos <= 2300)
                                 {
                                     lift(ON, 0.5);
@@ -514,15 +513,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                                 {
                                     lift(OFF, 0.0);
                                 }
-
-                                if (elementPosition == 1)
-                                {
-                                    extendServo.setPower(-0.475);
-                                }
-                                else
-                                {
-                                    extendServo.setPower(-0.4);
-                                }
+                                extendServo.setPower(-0.4);
                             }
                             if (finalTime > drive4)
                             {
@@ -613,7 +604,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (timeReset && finalTime < pan4)
                             {
-                                pan(RIGHT, 0.3, 90.0f);
+                                pan(RIGHT, 0.3, panningAngle);
                             }
                             if (timeReset && finalTime < drive5 && finalTime > pan4)
                             {
@@ -674,7 +665,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
      */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minResultConfidence = 0.8f;
         tfodParameters.isModelTensorFlow2 = true;
