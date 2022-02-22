@@ -155,7 +155,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
         }
         else
         {
-            correction = -currentAngle - startingAngle;
+            correction = currentAngle - startingAngle;
             correction *= gain;
         }
 
