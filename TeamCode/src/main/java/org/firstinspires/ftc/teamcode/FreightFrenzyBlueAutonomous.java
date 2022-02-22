@@ -613,7 +613,7 @@ public class FreightFrenzyBlueAutonomous extends LinearOpMode {
                             }
                             if (timeReset && finalTime < pan4)
                             {
-                                pan(RIGHT, 0.3, panningAngle);
+                                pan(RIGHT, 0.3, 90.0f);
                             }
                             if (timeReset && finalTime < drive5 && finalTime > pan4)
                             {
